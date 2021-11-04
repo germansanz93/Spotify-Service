@@ -11,7 +11,7 @@ public class AlbumMapper implements Function<AlbumRequest, Album> {
 
   public Album apply(AlbumRequest albumRequest){
     return Album.builder()
-        .idAlbum(5L) //TODO this would be generated on DB
+        .idAlbum(albumRequest.getIdAlbum())
         .idArtist(albumRequest.getIdArtist())
         .name(albumRequest.getName())
         .build();

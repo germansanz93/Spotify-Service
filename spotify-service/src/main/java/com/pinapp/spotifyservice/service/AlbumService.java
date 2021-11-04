@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 public class AlbumService {
@@ -32,6 +31,17 @@ public class AlbumService {
 
   public Album createAlbum(AlbumRequest request){
     Album album =  albumMapper.apply(request);
+    return album;
+  }
+
+  public Album updateAlbum(AlbumRequest request){
+    Album album = albumMapper.apply(request);
+    return album;
+  }
+
+  public Album deleteAlbum(Long id){
+    Album album = albums.stream().filter(a -> a.getIdAlbum() == id)
+        .findFirst().orElse(null);
     return album;
   }
 }

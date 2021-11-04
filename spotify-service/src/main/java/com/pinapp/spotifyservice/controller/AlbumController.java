@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping(path = "/albums")
 public class AlbumController {
@@ -27,5 +28,16 @@ public class AlbumController {
   @PostMapping(path = "/")
   public Album createAlbum(@Validated @RequestBody AlbumRequest request){
     return albumService.createAlbum(request);
+  }
+
+  @PutMapping(path = "/{id}")
+  public Album updateAlbum( @PathVariable Long id, @Validated @RequestBody AlbumRequest request ){
+    request.setIdAlbum(id);
+    return albumService.updateAlbum(request);
+  }
+
+  @DeleteMapping(path = "/{id}")
+  public Album deleteAlbum( @PathVariable Long id ){
+    return albumService.deleteAlbum(id);
   }
 }
