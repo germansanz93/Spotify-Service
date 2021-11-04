@@ -14,6 +14,6 @@ public class Track {
   private String name;
   private Long idArtist;
   private Long idAlbum;
-  private Long reproduction;
+  private Long reproductions;
   private Long duration; //Duration in ms
 }
