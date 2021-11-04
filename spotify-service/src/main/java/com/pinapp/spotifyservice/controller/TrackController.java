@@ -1,11 +1,11 @@
 package com.pinapp.spotifyservice.controller;
 
+import com.pinapp.spotifyservice.controller.request.TrackRequest;
 import com.pinapp.spotifyservice.domain.Track;
 import com.pinapp.spotifyservice.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,4 +18,25 @@ public class TrackController {
 
   @GetMapping(path = "/")
   public List<Track> retrieveTrack(){return trackService.getTracks();}
+
+  @GetMapping(path="/{id}")
+  public Track retrieveTrack(@PathVariable Long id){
+    return trackService.getTrack(id);
+  }
+
+  @PostMapping(path = "/")
+  public Track createTrack(@Validated @RequestBody TrackRequest request){
+    return trackService.createTrack(request);
+  }
+
+  @PutMapping(path="/{id}")
+  public Track updateTrack(@PathVariable Long id, @RequestBody TrackRequest request){
+    request.setId(id);
+    return trackService.updateTrack(request);
+  }
+
+  @DeleteMapping(path="/{id}")
+  public Track deleteTrack(@PathVariable Long id){
+    return trackService.deleteTrack(id);
+  }
 }
