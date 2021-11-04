@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.pinapp</groupId>
 	<artifactId>spotify-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>spotify-service</name>
 	<description>Spotify-Service project for Pinapp bootcamp</description>
 	<properties>
