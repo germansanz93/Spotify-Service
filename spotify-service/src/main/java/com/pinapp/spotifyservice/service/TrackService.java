@@ -3,12 +3,14 @@ package com.pinapp.spotifyservice.service;
 import com.pinapp.spotifyservice.controller.request.TrackRequest;
 import com.pinapp.spotifyservice.domain.Track;
 import com.pinapp.spotifyservice.domain.mappers.TrackMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class TrackService {
 
@@ -18,9 +20,13 @@ public class TrackService {
 
   private List<Track> tracks = new ArrayList<Track>();
 
-  public List<Track> getTracks(){ return tracks; };
+  public List<Track> getTracks(){
+    log.info("getTracks request");
+    return tracks;
+  };
 
   public Track getTrack(Long id){
+    log.info(String.format("getTrackById request with id: %d", id));
     return tracks.stream().filter(track -> track.getId() == id).findFirst().orElse(null);
   };
 
@@ -31,6 +37,7 @@ public class TrackService {
     track.setId(id);
     track.setReproductions(0L);
     tracks.add(track);
+    log.info(String.format("createTrack request, created with id: %d", id));
     return track;
   }
 
@@ -42,12 +49,14 @@ public class TrackService {
     }else {
       track = null;
     }
+    log.info(String.format("updateTrack request, updated with id: %d", idTrack));
     return track;
   }
 
   public Track deleteTrack(Long id){
     Track track = tracks.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
     tracks.remove(track);
+    log.info(String.format("deleteTrack request, deleted with id: %d", id));
     return track;
   }
 
