@@ -22,12 +22,12 @@ public class ArtistController {
   public Artist retrieveArtist(@PathVariable Long id){return artistService.getArtist(id);}
 
   @PostMapping(path = "/")
-  public Artist createAlbum(@RequestBody ArtistRequest artist){return artistService.createArtist(artist);}
+  public Artist createArtist(@RequestBody ArtistRequest artist){return artistService.createArtist(artist);}
 
   @PutMapping(path = "/{id}")
-  public Artist updateAlbum(@PathVariable Long id, @RequestBody ArtistRequest request){
+  public Artist updateArtist(@PathVariable Long id, @RequestBody ArtistRequest request){
     request.setIdArtist(id);
-    return artistService.createArtist(request);
+    return artistService.updateArtist(request);
   }
 
   @DeleteMapping(path = "/{id}")
