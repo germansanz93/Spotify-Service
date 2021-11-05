@@ -16,4 +16,5 @@ public class Track {
   private Long idAlbum;
   private Long reproductions;
   private Long duration; //Duration in ms
+
 }

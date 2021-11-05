@@ -35,6 +35,7 @@ public class TrackService {
     Long id = 0L;
     if(tracks.size() > 0) id = tracks.get(tracks.size() - 1).getId() + 1L;
     track.setId(id);
+    track.setReproductions(0L);
     tracks.add(track);
     return track;
   }
@@ -49,9 +50,20 @@ public class TrackService {
     }
     return track;
   }
+
   public Track deleteTrack(Long id){
     Track track = tracks.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
     tracks.remove(track);
+    return track;
+  }
+
+  public Track playTrack(Long idTrack){
+    Track track = null;
+    if(tracks.stream().filter(a -> a.getId() == idTrack).findFirst().orElse(null) != null){
+      track = this.getTrack(idTrack);
+      track.setReproductions(track.getReproductions() + 1);
+      tracks.set(Long.valueOf(track.getId()).intValue(), track);
+    }
     return track;
   }
 }
