@@ -9,13 +9,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AlbumService {
-
-//  @Qualifier("albums")
-//  @Autowired
-//  private List<Album> albums;
 
   @Autowired
   private AlbumMapper albumMapper;
@@ -27,9 +24,8 @@ public class AlbumService {
   }
 
   public Album getAlbum(Long id){
-    Album album = albums.stream().filter(a -> a.getIdAlbum() == id)
+    return albums.stream().filter(a -> a.getIdAlbum() == id)
         .findFirst().orElse(null);
-    return album;
   }
 
   public Album createAlbum(AlbumRequest request){
@@ -44,12 +40,14 @@ public class AlbumService {
   public Album updateAlbum(AlbumRequest request){
     Album album = albumMapper.apply(request);
     final Long idAlbum = album.getIdAlbum();
-    if(albums.stream().filter(a -> a.getIdAlbum() == idAlbum).findFirst().orElse(null) != null){
+    Optional<Album> foundAlbum = albums.stream().filter(a -> a.getIdAlbum() == idAlbum).findFirst();
+    if(foundAlbum.isPresent()){
       albums.set(Long.valueOf(album.getIdAlbum()).intValue(), album);
     }else {
       album = null;
     }
     return album;
+
   }
 
   public Album deleteAlbum(Long id){

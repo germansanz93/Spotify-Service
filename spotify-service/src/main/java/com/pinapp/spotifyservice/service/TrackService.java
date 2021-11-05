@@ -1,12 +1,9 @@
 package com.pinapp.spotifyservice.service;
 
 import com.pinapp.spotifyservice.controller.request.TrackRequest;
-import com.pinapp.spotifyservice.domain.Album;
-import com.pinapp.spotifyservice.domain.Artist;
 import com.pinapp.spotifyservice.domain.Track;
 import com.pinapp.spotifyservice.domain.mappers.TrackMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,9 +15,6 @@ public class TrackService {
   @Autowired
   public TrackMapper trackMapper;
 
-//  @Qualifier("tracks")
-//  @Autowired
-//  private List<Track> tracks;
 
   private List<Track> tracks = new ArrayList<Track>();
 

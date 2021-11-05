@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ArtistService {
@@ -15,9 +16,6 @@ public class ArtistService {
   @Autowired
   public ArtistMapper artistMapper;
 
-//  @Qualifier("artists")
-//  @Autowired
-//  private List<Artist> artists;
 
   private List<Artist> artists = new ArrayList<Artist>();
 
@@ -26,9 +24,8 @@ public class ArtistService {
   }
 
   public Artist getArtist(Long id){
-    Artist artist = artists.stream().filter(a -> a.getIdArtist() == id)
+    return artists.stream().filter(a -> a.getIdArtist() == id)
         .findFirst().orElse(null);
-    return artist;
   }
 
   public Artist createArtist(ArtistRequest request){
@@ -43,11 +40,14 @@ public class ArtistService {
   public Artist updateArtist(ArtistRequest request){
     Artist artist = artistMapper.apply(request);
     final Long idArtist = artist.getIdArtist();
-    if(artists.stream().filter(a -> a.getIdArtist() == idArtist).findFirst().orElse(null) != null){
+    Optional<Artist> foundArtist = artists.stream().filter(a -> a.getIdArtist() == idArtist).findFirst();
+
+    if (foundArtist.isPresent()){
       artists.set(Long.valueOf(artist.getIdArtist()).intValue(), artist);
-    }else {
+    } else {
       artist = null;
     }
+
     return artist;
   }
 

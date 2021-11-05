@@ -11,13 +11,13 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(path = "/albums")
+@RequestMapping(path = "/album")
 public class AlbumController {
 
   @Autowired
   private AlbumService albumService;
 
-  @GetMapping(path = "/")
+  @GetMapping
   public List<Album> retrieveAlbums(){
     return albumService.getAlbums();
   }
@@ -25,7 +25,7 @@ public class AlbumController {
   @GetMapping(path = "/{id}")
   public Album retrieveAlbum(@PathVariable Long id){ return albumService.getAlbum(id);};
 
-  @PostMapping(path = "/")
+  @PostMapping
   public Album createAlbum(@Validated @RequestBody AlbumRequest request){
     return albumService.createAlbum(request);
   }

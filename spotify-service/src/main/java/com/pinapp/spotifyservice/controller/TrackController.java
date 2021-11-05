@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/tracks")
+@RequestMapping(path = "/track")
 public class TrackController {
 
   @Autowired
   private TrackService trackService;
 
-  @GetMapping(path = "/")
+  @GetMapping
   public List<Track> retrieveTrack(){return trackService.getTracks();}
 
   @GetMapping(path="/{id}")
@@ -24,7 +24,7 @@ public class TrackController {
     return trackService.getTrack(id);
   }
 
-  @PostMapping(path = "/")
+  @PostMapping
   public Track createTrack(@Validated @RequestBody TrackRequest request){
     return trackService.createTrack(request);
   }

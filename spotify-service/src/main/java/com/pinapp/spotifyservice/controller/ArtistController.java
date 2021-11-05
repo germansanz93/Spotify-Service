@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/artists")
+@RequestMapping(path = "/artist")
 public class ArtistController {
 
   @Autowired
   private ArtistService artistService;
 
-  @GetMapping(path = "/")
+  @GetMapping
   public List<Artist> retrieveArtist(){return artistService.getArtists();}
 
   @GetMapping(path = "/{id}")
   public Artist retrieveArtist(@PathVariable Long id){return artistService.getArtist(id);}
 
-  @PostMapping(path = "/")
+  @PostMapping
   public Artist createArtist(@RequestBody ArtistRequest artist){return artistService.createArtist(artist);}
 
   @PutMapping(path = "/{id}")
