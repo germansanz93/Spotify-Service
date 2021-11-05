@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -18,17 +19,17 @@ public class TrackService {
   public TrackMapper trackMapper;
 
 
-  private List<Track> tracks = new ArrayList<Track>();
+  private final List<Track> tracks = new ArrayList<>();
 
   public List<Track> getTracks(){
     log.info("getTracks request");
     return tracks;
-  };
+  }
 
   public Track getTrack(Long id){
     log.info(String.format("getTrackById request with id: %d", id));
-    return tracks.stream().filter(track -> track.getId() == id).findFirst().orElse(null);
-  };
+    return tracks.stream().filter(track -> Objects.equals(track.getId(), id)).findFirst().orElse(null);
+  }
 
   public Track createTrack(TrackRequest request){
     Track track =  trackMapper.apply(request);
@@ -44,8 +45,8 @@ public class TrackService {
   public Track updateTrack(TrackRequest request){
     Track track = trackMapper.apply(request);
     final Long idTrack = track.getId();
-    if(tracks.stream().filter(a -> a.getId() == idTrack).findFirst().orElse(null) != null){
-      tracks.set(Long.valueOf(track.getId()).intValue(), track);
+    if(tracks.stream().filter(a -> Objects.equals(a.getId(), idTrack)).findFirst().orElse(null) != null){
+      tracks.set(track.getId().intValue(), track);
     }else {
       track = null;
     }
@@ -54,7 +55,7 @@ public class TrackService {
   }
 
   public Track deleteTrack(Long id){
-    Track track = tracks.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
+    Track track = tracks.stream().filter(t -> Objects.equals(t.getId(), id)).findFirst().orElse(null);
     tracks.remove(track);
     log.info(String.format("deleteTrack request, deleted with id: %d", id));
     return track;
@@ -62,10 +63,10 @@ public class TrackService {
 
   public Track playTrack(Long idTrack){
     Track track = null;
-    if(tracks.stream().filter(a -> a.getId() == idTrack).findFirst().orElse(null) != null){
+    if(tracks.stream().filter(a -> Objects.equals(a.getId(), idTrack)).findFirst().orElse(null) != null){
       track = this.getTrack(idTrack);
       track.setReproductions(track.getReproductions() + 1);
-      tracks.set(Long.valueOf(track.getId()).intValue(), track);
+      tracks.set(track.getId().intValue(), track);
     }
     return track;
   }

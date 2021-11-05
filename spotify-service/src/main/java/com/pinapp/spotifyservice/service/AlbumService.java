@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -18,7 +19,7 @@ public class AlbumService {
   @Autowired
   private AlbumMapper albumMapper;
 
-  private List<Album> albums = new ArrayList<Album>();
+  private final List<Album> albums = new ArrayList<>();
 
   public List<Album> getAlbums(){
     log.info("getAlbums request");
@@ -27,7 +28,7 @@ public class AlbumService {
 
   public Album getAlbum(Long id){
     log.info(String.format("getAlbumById request with id: %d", id));
-    return albums.stream().filter(a -> a.getIdAlbum() == id)
+    return albums.stream().filter(a -> Objects.equals(a.getIdAlbum(), id))
         .findFirst().orElse(null);
   }
 
@@ -44,9 +45,9 @@ public class AlbumService {
   public Album updateAlbum(AlbumRequest request){
     Album album = albumMapper.apply(request);
     final Long idAlbum = album.getIdAlbum();
-    Optional<Album> foundAlbum = albums.stream().filter(a -> a.getIdAlbum() == idAlbum).findFirst(); //TODO implement this as a method
+    Optional<Album> foundAlbum = albums.stream().filter(a -> Objects.equals(a.getIdAlbum(), idAlbum)).findFirst(); //TODO implement this as a method
     if(foundAlbum.isPresent()){
-      albums.set(Long.valueOf(album.getIdAlbum()).intValue(), album);
+      albums.set(album.getIdAlbum().intValue(), album);
     }else {
       album = null;
     }
@@ -56,7 +57,7 @@ public class AlbumService {
   }
 
   public Album deleteAlbum(Long id){
-    Album album = albums.stream().filter(a -> a.getIdAlbum() == id)
+    Album album = albums.stream().filter(a -> Objects.equals(a.getIdAlbum(), id))
         .findFirst().orElse(null);
     albums.remove(album);
     log.info(String.format("deleteAlbum request, deleted with id: %d", id));

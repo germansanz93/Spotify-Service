@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -19,7 +20,7 @@ public class ArtistService {
   public ArtistMapper artistMapper;
 
 
-  private List<Artist> artists = new ArrayList<Artist>();
+  private final List<Artist> artists = new ArrayList<>();
 
   public List<Artist> getArtists(){
     log.info("getArtists request");
@@ -28,7 +29,7 @@ public class ArtistService {
 
   public Artist getArtist(Long id){
     log.info(String.format("getArtistById request with id: %d", id));
-    return artists.stream().filter(a -> a.getIdArtist() == id)
+    return artists.stream().filter(a -> Objects.equals(a.getIdArtist(), id))
         .findFirst().orElse(null);
   }
 
@@ -45,10 +46,10 @@ public class ArtistService {
   public Artist updateArtist(ArtistRequest request){
     Artist artist = artistMapper.apply(request);
     final Long idArtist = artist.getIdArtist();
-    Optional<Artist> foundArtist = artists.stream().filter(a -> a.getIdArtist() == idArtist).findFirst();
+    Optional<Artist> foundArtist = artists.stream().filter(a -> Objects.equals(a.getIdArtist(), idArtist)).findFirst();
 
     if (foundArtist.isPresent()){
-      artists.set(Long.valueOf(artist.getIdArtist()).intValue(), artist);
+      artists.set(artist.getIdArtist().intValue(), artist);
     } else {
       artist = null;
     }
@@ -57,7 +58,7 @@ public class ArtistService {
   }
 
   public Artist deleteArtist(Long id){
-    Artist artist = artists.stream().filter(a -> a.getIdArtist() == id)
+    Artist artist = artists.stream().filter(a -> Objects.equals(a.getIdArtist(), id))
         .findFirst().orElse(null);
     artists.remove(artist);
     log.info(String.format("deleteArtist request, deleted with id: %d", id));
