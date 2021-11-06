@@ -5,8 +5,10 @@ import com.pinapp.spotifyservice.domain.Artist;
 import com.pinapp.spotifyservice.domain.mappers.ArtistMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,26 +21,35 @@ public class ArtistService {
   @Autowired
   public ArtistMapper artistMapper;
 
+  @Autowired
+  @Qualifier("artists")
+  private List<Artist> artists;
 
-  private final List<Artist> artists = new ArrayList<>();
+  @PostConstruct
+  public void init() {
+    artistsList = new ArrayList<>();
+    artistsList.addAll(artists);
+  }
+
+  private List<Artist> artistsList;
 
   public List<Artist> getArtists(){
     log.info("getArtists request");
-    return artists;
+    return artistsList;
   }
 
   public Artist getArtist(Long id){
     log.info(String.format("getArtistById request with id: %d", id));
-    return artists.stream().filter(a -> Objects.equals(a.getIdArtist(), id))
+    return artistsList.stream().filter(a -> Objects.equals(a.getIdArtist(), id))
         .findFirst().orElse(null);
   }
 
   public Artist createArtist(ArtistRequest request){
     Artist artist =  artistMapper.apply(request);
-    Long id = 0L;
-    if(artists.size() > 0) id = artists.get(artists.size() - 1).getIdArtist() + 1L;
+    Long id = 1L;
+    if(artistsList.size() > 0) id = artistsList.get(artistsList.size() - 1).getIdArtist() + 1L;
     artist.setIdArtist(id);
-    artists.add(artist);
+    artistsList.add(artist);
     log.info(String.format("createArtist request, created with id: %d", id));
     return artist;
   }
@@ -49,7 +60,7 @@ public class ArtistService {
     Optional<Artist> foundArtist = artists.stream().filter(a -> Objects.equals(a.getIdArtist(), idArtist)).findFirst();
 
     if (foundArtist.isPresent()){
-      artists.set(artist.getIdArtist().intValue(), artist);
+      artistsList.set(artist.getIdArtist().intValue()-1, artist);
     } else {
       artist = null;
     }
@@ -58,11 +69,10 @@ public class ArtistService {
   }
 
   public Artist deleteArtist(Long id){
-    Artist artist = artists.stream().filter(a -> Objects.equals(a.getIdArtist(), id))
-        .findFirst().orElse(null);
-    artists.remove(artist);
+    Optional<Artist> artist = artistsList.stream().filter(a -> Objects.equals(a.getIdArtist(), id)).findFirst();
+    artistsList.remove(artist.get());
     log.info(String.format("deleteArtist request, deleted with id: %d", id));
-    return artist;
+    return artist.get();
   }
 
 }
