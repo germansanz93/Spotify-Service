@@ -1,8 +1,9 @@
-package com.pinapp.spotifyservice.service;
+package com.pinapp.spotifyservice.service.Implementations;
 
 import com.pinapp.spotifyservice.controller.request.TrackRequest;
 import com.pinapp.spotifyservice.domain.Track;
 import com.pinapp.spotifyservice.domain.mappers.TrackMapper;
+import com.pinapp.spotifyservice.service.ITrackService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class TrackService {
+public class TrackService implements ITrackService {
 
   @Autowired
   public TrackMapper trackMapper;

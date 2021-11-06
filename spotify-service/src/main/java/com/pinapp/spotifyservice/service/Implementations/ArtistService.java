@@ -1,8 +1,9 @@
-package com.pinapp.spotifyservice.service;
+package com.pinapp.spotifyservice.service.Implementations;
 
 import com.pinapp.spotifyservice.controller.request.ArtistRequest;
 import com.pinapp.spotifyservice.domain.Artist;
 import com.pinapp.spotifyservice.domain.mappers.ArtistMapper;
+import com.pinapp.spotifyservice.service.IArtistService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class ArtistService {
+public class ArtistService implements IArtistService {
 
   @Autowired
   public ArtistMapper artistMapper;

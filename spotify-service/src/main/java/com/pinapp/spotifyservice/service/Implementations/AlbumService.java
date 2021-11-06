@@ -1,8 +1,9 @@
-package com.pinapp.spotifyservice.service;
+package com.pinapp.spotifyservice.service.Implementations;
 
 import com.pinapp.spotifyservice.controller.request.AlbumRequest;
 import com.pinapp.spotifyservice.domain.Album;
 import com.pinapp.spotifyservice.domain.mappers.AlbumMapper;
+import com.pinapp.spotifyservice.service.IAlbumService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class AlbumService {
+public class AlbumService implements IAlbumService {
 
   @Autowired
   private AlbumMapper albumMapper;

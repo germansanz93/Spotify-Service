@@ -2,7 +2,7 @@ package com.pinapp.spotifyservice.controller;
 
 import com.pinapp.spotifyservice.controller.request.ArtistRequest;
 import com.pinapp.spotifyservice.domain.Artist;
-import com.pinapp.spotifyservice.service.ArtistService;
+import com.pinapp.spotifyservice.service.Implementations.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
