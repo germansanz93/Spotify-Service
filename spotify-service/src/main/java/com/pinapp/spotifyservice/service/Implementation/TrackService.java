@@ -43,8 +43,12 @@ public class TrackService implements ITrackService {
         .stream()
         .filter(track -> Objects.equals(track.getIdArtist(), idArtist))
         .sorted(Comparator.comparing(Track::getReproductions).reversed())
-        .limit(5)
         .collect(Collectors.toList());
+  }
+
+  public List<Track> getArtistRankedTracks(Long idArtist,int limit){
+    log.info(String.format("and limit: %d", limit));
+    return getArtistRankedTracks(idArtist).subList(0, limit);
   }
 
   public Track getTrack(Long id){
