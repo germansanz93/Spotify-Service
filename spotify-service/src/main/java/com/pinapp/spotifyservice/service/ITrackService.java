@@ -9,6 +9,8 @@ public interface ITrackService {
 
   List getTracks();
 
+  List getArtistRankedTracks(Long idArtist);
+
   Track getTrack(Long id);
 
   Track createTrack(TrackRequest request);

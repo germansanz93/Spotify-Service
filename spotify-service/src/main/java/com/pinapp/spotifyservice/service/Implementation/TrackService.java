@@ -10,10 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -37,6 +35,16 @@ public class TrackService implements ITrackService {
   public List<Track> getTracks(){
     log.info("getTracks request");
     return trackList;
+  }
+
+  public List<Track> getArtistRankedTracks(Long idArtist){
+    log.info(String.format("getTracksByArtist request with idArtist: %d", idArtist));
+    return trackList
+        .stream()
+        .filter(track -> Objects.equals(track.getIdArtist(), idArtist))
+        .sorted(Comparator.comparing(Track::getReproductions).reversed())
+        .limit(5)
+        .collect(Collectors.toList());
   }
 
   public Track getTrack(Long id){
