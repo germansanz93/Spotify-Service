@@ -1,6 +1,6 @@
-package com.pinapp.spotifyservice.service.Implementations;
+package com.pinapp.spotifyservice.service.Implementation;
 
-import com.pinapp.spotifyservice.domain.Track;
+import com.pinapp.spotifyservice.domain.model.Track;
 import com.pinapp.spotifyservice.service.ISpotifyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

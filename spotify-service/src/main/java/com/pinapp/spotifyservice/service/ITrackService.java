@@ -1,7 +1,7 @@
 package com.pinapp.spotifyservice.service;
 
 import com.pinapp.spotifyservice.controller.request.TrackRequest;
-import com.pinapp.spotifyservice.domain.Track;
+import com.pinapp.spotifyservice.domain.model.Track;
 
 import java.util.List;
 

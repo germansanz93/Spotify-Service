@@ -1,8 +1,8 @@
-package com.pinapp.spotifyservice.service.Implementations;
+package com.pinapp.spotifyservice.service.Implementation;
 
 import com.pinapp.spotifyservice.controller.request.AlbumRequest;
-import com.pinapp.spotifyservice.domain.Album;
-import com.pinapp.spotifyservice.domain.mappers.AlbumMapper;
+import com.pinapp.spotifyservice.domain.model.Album;
+import com.pinapp.spotifyservice.domain.mapper.AlbumMapper;
 import com.pinapp.spotifyservice.service.IAlbumService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

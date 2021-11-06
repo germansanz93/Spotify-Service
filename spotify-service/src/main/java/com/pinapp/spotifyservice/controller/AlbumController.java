@@ -1,8 +1,8 @@
 package com.pinapp.spotifyservice.controller;
 
 import com.pinapp.spotifyservice.controller.request.AlbumRequest;
-import com.pinapp.spotifyservice.domain.Album;
-import com.pinapp.spotifyservice.service.Implementations.AlbumService;
+import com.pinapp.spotifyservice.domain.model.Album;
+import com.pinapp.spotifyservice.service.Implementation.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

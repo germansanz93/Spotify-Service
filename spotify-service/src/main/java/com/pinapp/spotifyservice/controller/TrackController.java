@@ -1,8 +1,8 @@
 package com.pinapp.spotifyservice.controller;
 
 import com.pinapp.spotifyservice.controller.request.TrackRequest;
-import com.pinapp.spotifyservice.domain.Track;
-import com.pinapp.spotifyservice.service.Implementations.TrackService;
+import com.pinapp.spotifyservice.domain.model.Track;
+import com.pinapp.spotifyservice.service.Implementation.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

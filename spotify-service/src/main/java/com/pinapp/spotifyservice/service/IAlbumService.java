@@ -1,7 +1,7 @@
 package com.pinapp.spotifyservice.service;
 
 import com.pinapp.spotifyservice.controller.request.AlbumRequest;
-import com.pinapp.spotifyservice.domain.Album;
+import com.pinapp.spotifyservice.domain.model.Album;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
-package com.pinapp.spotifyservice.domain.mappers;
+package com.pinapp.spotifyservice.domain.mapper;
 
 import com.pinapp.spotifyservice.controller.request.ArtistRequest;
-import com.pinapp.spotifyservice.domain.Artist;
+import com.pinapp.spotifyservice.domain.model.Artist;
 import org.springframework.stereotype.Component;
 
 @Component
