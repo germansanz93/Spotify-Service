@@ -2,6 +2,7 @@ package com.pinapp.spotifyservice.controller;
 
 import com.pinapp.spotifyservice.controller.request.AlbumRequest;
 import com.pinapp.spotifyservice.domain.model.Album;
+import com.pinapp.spotifyservice.repository.AlbumRepository;
 import com.pinapp.spotifyservice.service.Implementation.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/album")
 public class AlbumController {
+
+  @Autowired
+  private AlbumRepository albumRepository;
 
   @Autowired
   private AlbumService albumService;

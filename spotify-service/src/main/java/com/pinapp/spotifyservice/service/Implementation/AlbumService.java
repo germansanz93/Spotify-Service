@@ -4,6 +4,7 @@ import com.pinapp.spotifyservice.controller.request.AlbumRequest;
 import com.pinapp.spotifyservice.domain.model.Album;
 import com.pinapp.spotifyservice.domain.mapper.AlbumMapper;
 import com.pinapp.spotifyservice.exception.AlbumNotExistException;
+import com.pinapp.spotifyservice.repository.AlbumRepository;
 import com.pinapp.spotifyservice.service.IAlbumService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +12,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
 public class AlbumService implements IAlbumService {
+
+  @Autowired
+  private AlbumRepository albumRepository;
 
   @Autowired
   private AlbumMapper albumMapper;
@@ -30,8 +33,9 @@ public class AlbumService implements IAlbumService {
 
   @PostConstruct
   public void init() {
-    albumsList = new ArrayList<>();
-    albumsList.addAll(albums);
+//    albumsList = new ArrayList<>();
+//    albumsList.addAll(albums);
+    albums.stream().forEach(album -> albumRepository.save(album));
   }
 
   private List<Album> albumsList;
@@ -39,7 +43,7 @@ public class AlbumService implements IAlbumService {
 
   public List<Album> getAlbums(){
     log.info("getAlbums request");
-    return albumsList;
+    return StreamSupport.stream(albumRepository.findAll().spliterator(), false).collect(Collectors.toList());
   }
 
   public Album getAlbum(Long id){
