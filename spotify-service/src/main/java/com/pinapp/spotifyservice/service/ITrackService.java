@@ -15,6 +15,8 @@ public interface ITrackService {
 
   List<Track> getArtistRankedTracks(Long idArtist,int limit);
 
+  List<Track> getRankedTracks(int limit);
+
   Track getTrack(Long id);
 
   Track createTrack(TrackRequest request);

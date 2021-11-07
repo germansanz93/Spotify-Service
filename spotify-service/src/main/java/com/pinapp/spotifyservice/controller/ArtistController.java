@@ -36,7 +36,7 @@ public class ArtistController {
   }
 
   @GetMapping(path = "/rank")
-  public List<Artist> retrieveArtistsRanked(){return artistService.getTopArtists();}
+  public List<Artist> retrieveArtistsRanked(@RequestParam(name = "limit") Optional<Integer> limit){return artistService.getTopArtists(limit.orElse(5));}
 
   @PostMapping
   public Artist createArtist(@RequestBody ArtistRequest artist){return artistService.createArtist(artist);}

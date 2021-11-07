@@ -59,8 +59,8 @@ public class ArtistService implements IArtistService {
     artistsList.set(idArtist.intValue()-1, artist);
   }
 
-  public List<Artist> getTopArtists(){
-    return artistsList.stream().sorted(Comparator.comparingDouble(Artist::getReproductions).reversed()).collect(Collectors.toList());
+  public List<Artist> getTopArtists(int limit){
+    return artistsList.stream().sorted(Comparator.comparingDouble(Artist::getReproductions).reversed()).limit(limit).collect(Collectors.toList());
   }
 
   public Artist createArtist(ArtistRequest request){

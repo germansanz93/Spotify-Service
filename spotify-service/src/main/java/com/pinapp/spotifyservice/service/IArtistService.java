@@ -11,7 +11,7 @@ public interface IArtistService {
 
   Artist getArtist(Long id);
 
-  List<Artist> getTopArtists();
+  List<Artist> getTopArtists(int limit);
 
   Artist createArtist(ArtistRequest request);
 

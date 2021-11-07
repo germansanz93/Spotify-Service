@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,6 +60,10 @@ public class TrackService implements ITrackService {
   public List<Track> getArtistRankedTracks(Long idArtist,int limit){
     log.info(String.format("getTracksByArtist request with idArtist: %d but ranked and limited %d", idArtist, limit));
     return getArtistRankedTracks(idArtist).subList(0, limit);
+  }
+
+  public List<Track> getRankedTracks(int limit){
+    return trackList.stream().sorted(Comparator.comparing(Track::getReproductions).reversed()).limit(limit).collect(Collectors.toList());
   }
 
   public Track getTrack(Long id){
