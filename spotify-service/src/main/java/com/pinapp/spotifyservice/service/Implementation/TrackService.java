@@ -18,6 +18,9 @@ import java.util.stream.Collectors;
 public class TrackService implements ITrackService {
 
   @Autowired
+  public ArtistService artistService;
+
+  @Autowired
   public TrackMapper trackMapper;
 
   @Autowired
@@ -37,17 +40,24 @@ public class TrackService implements ITrackService {
     return trackList;
   }
 
-  public List<Track> getArtistRankedTracks(Long idArtist){
+  public List<Track> getTracksByArtist(Long idArtist){
     log.info(String.format("getTracksByArtist request with idArtist: %d", idArtist));
     return trackList
         .stream()
         .filter(track -> Objects.equals(track.getIdArtist(), idArtist))
+        .collect(Collectors.toList());
+  }
+
+  public List<Track> getArtistRankedTracks(Long idArtist){
+    log.info(String.format("getTracksByArtist request with idArtist: %d but ranked", idArtist));
+    return getTracksByArtist(idArtist)
+        .stream()
         .sorted(Comparator.comparing(Track::getReproductions).reversed())
         .collect(Collectors.toList());
   }
 
   public List<Track> getArtistRankedTracks(Long idArtist,int limit){
-    log.info(String.format("and limit: %d", limit));
+    log.info(String.format("getTracksByArtist request with idArtist: %d but ranked and limited %d", idArtist, limit));
     return getArtistRankedTracks(idArtist).subList(0, limit);
   }
 
@@ -92,7 +102,8 @@ public class TrackService implements ITrackService {
     Optional<Track> track = trackList.stream().filter(t -> Objects.equals(t.getId(), idTrack)).findFirst();
     if(track.isPresent()){
       track.get().setReproductions(track.get().getReproductions() + 1);
-      trackList.set(track.get().getId().intValue(), track.get());
+      trackList.set(track.get().getId().intValue()-1, track.get());
+      artistService.updateArtistReproductions(track.get().getIdArtist());
     }
     return track.get();
   }

@@ -15,7 +15,6 @@ public class ArtistRequest {
   private String name;
   @NotBlank(message = "genre field cannot be blank nor null")
   private String genre;
-
   private String image;
 
 }

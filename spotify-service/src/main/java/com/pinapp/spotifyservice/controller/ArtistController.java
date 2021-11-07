@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -31,8 +32,11 @@ public class ArtistController {
 
   @GetMapping(path = "/{id}/songs/rank")
   public List<Track> retrieveArtistRankedSongs(@PathVariable Long id, @RequestParam(name = "limit") Optional<Integer> limit){
-    return trackService.getArtistRankedTracks(id, limit.orElseGet(() -> 5));
+    return trackService.getArtistRankedTracks(id, limit.orElse(5));
   }
+
+  @GetMapping(path = "/rank")
+  public List<Artist> retrieveArtistsRanked(){return artistService.getTopArtists();}
 
   @PostMapping
   public Artist createArtist(@RequestBody ArtistRequest artist){return artistService.createArtist(artist);}
