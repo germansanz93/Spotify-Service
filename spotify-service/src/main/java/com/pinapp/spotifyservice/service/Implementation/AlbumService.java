@@ -33,8 +33,6 @@ public class AlbumService implements IAlbumService {
 
   @PostConstruct
   public void init() {
-//    albumsList = new ArrayList<>();
-//    albumsList.addAll(albums);
     albums.stream().forEach(album -> albumRepository.save(album));
   }
 

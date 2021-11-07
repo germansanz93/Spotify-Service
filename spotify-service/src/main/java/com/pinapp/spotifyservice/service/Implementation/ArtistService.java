@@ -5,6 +5,7 @@ import com.pinapp.spotifyservice.domain.model.Artist;
 import com.pinapp.spotifyservice.domain.mapper.ArtistMapper;
 import com.pinapp.spotifyservice.domain.model.Track;
 import com.pinapp.spotifyservice.exception.ArtistNotExistException;
+import com.pinapp.spotifyservice.repository.ArtistRepository;
 import com.pinapp.spotifyservice.service.IArtistService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ import java.util.stream.Collectors;
 public class ArtistService implements IArtistService {
 
   @Autowired
+  public ArtistRepository artistRepository;
+
+  @Autowired
   public TrackService trackService;
 
   @Autowired
@@ -32,8 +36,7 @@ public class ArtistService implements IArtistService {
 
   @PostConstruct
   public void init() {
-    artistsList = new ArrayList<>();
-    artistsList.addAll(artists);
+    artists.stream().forEach(artist -> artistRepository.save(artist));
   }
 
   private List<Artist> artistsList;

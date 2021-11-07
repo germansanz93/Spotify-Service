@@ -4,6 +4,7 @@ import com.pinapp.spotifyservice.controller.request.TrackRequest;
 import com.pinapp.spotifyservice.domain.model.Track;
 import com.pinapp.spotifyservice.domain.mapper.TrackMapper;
 import com.pinapp.spotifyservice.exception.TrackNotExistException;
+import com.pinapp.spotifyservice.repository.TrackRepository;
 import com.pinapp.spotifyservice.service.ITrackService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ import java.util.stream.Collectors;
 public class TrackService implements ITrackService {
 
   @Autowired
+  public TrackRepository trackRepository;
+
+  @Autowired
   public ArtistService artistService;
 
   @Autowired
@@ -31,8 +35,7 @@ public class TrackService implements ITrackService {
 
   @PostConstruct
   public void init() {
-    trackList = new ArrayList<>();
-    trackList.addAll(tracks);
+    tracks.stream().forEach(track -> trackRepository.save(track));
   }
 
   private List<Track> trackList;
