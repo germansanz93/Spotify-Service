@@ -1,0 +1,142 @@
+swagger: "2.0"
+info:
+  description: "This is a tiny emulation of a spotify server."
+  version: "1.0.0"
+  title: "Spotify-Service"
+  contact:
+    email: "germansanz93@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8080"
+tags:
+- name: "Album"
+  description: "Album operations"
+- name: "store"
+  description: "Access to Petstore orders"
+- name: "user"
+  description: "Operations about user"
+
+schemes:
+- "https"
+- "http"
+paths:
+  /album:
+    get:
+      tags:
+      - "album"
+      summary: "Returns all albums"
+      operationId: "getAlbums"
+      produces:
+      - "application/json"
+      responses: 
+        200:
+          description: "Ok"
+          schema: 
+            $ref: "#/definitions/ArrayOfAlbums"
+        400:
+          description: "Bad request"
+        404:
+          description: "Not found"
+        500:
+          description: "Internal server error"
+    post:
+      tags:
+      - "album"
+      summary: "Create an album"
+      operationId: "CreateAlbum"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Album that needs to be added to the app"
+        required: true
+        schema:
+          $ref: "#/definitions/AlbumInput"
+      responses:
+        201:
+          description: "CREATED"
+          schema:
+            $ref: "#/definitions/AlbumResponse"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+
+definitions:
+  ArrayOfAlbums:
+    type: "array"
+    items:
+      properties:
+        idAlbum:
+          type: "number"
+        idArtist:
+          type: "number"
+        name:
+          type: "string"
+          
+
+          
+  AlbumInput:
+    type: "object"
+    properties:
+      idArtist:
+        type: "number"
+      name:
+        type: "string"
+  AlbumResponse:
+    type: "object"
+    properties:
+      idAlbum:
+        type: "number"
+      idArtist:
+        type: "number"
+      name:
+        type: "string"
+  ErrorNotFoundResponse:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+        example: "GENERIC_NOT_FOUND"
+      message:
+        type: "string"
+        example: "Resource Not Found"
+      result:
+        type: "string"
+        example: "GENERIC_NOT_FOUND"
+  ErrorBadRequestResponse:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+        example: "GENERIC_BAD_REQUEST"
+      message:
+        type: "string"
+        example: "Invalid Request"
+      result:
+        type: "string"
+        example: "GENERIC_NOT_FOUND"
+  ErrorInternalServerResponse:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+        example: "GENERIC_INTERNAL_SERVER_ERROR"
+      message:
+        type: "string"
+        example: "Internal Server Error"
+      result:
+        type: "string"
+        example: "GENERIC_INTERNAL_SERVER_ERROR"
