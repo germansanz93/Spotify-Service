@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: "This is a tiny emulation of a spotify server."
+  description: "This is a tiny emulation of the spotify service."
   version: "1.0.0"
   title: "Spotify-Service"
   contact:
@@ -12,10 +12,6 @@ host: "localhost:8080"
 tags:
 - name: "Album"
   description: "Album operations"
-- name: "store"
-  description: "Access to Petstore orders"
-- name: "user"
-  description: "Operations about user"
 
 schemes:
 - "https"
@@ -24,7 +20,7 @@ paths:
   /album:
     get:
       tags:
-      - "album"
+      - "Album"
       summary: "Returns all albums"
       operationId: "getAlbums"
       produces:
@@ -35,14 +31,20 @@ paths:
           schema: 
             $ref: "#/definitions/ArrayOfAlbums"
         400:
-          description: "Bad request"
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
         404:
-          description: "Not found"
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
         500:
-          description: "Internal server error"
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
     post:
       tags:
-      - "album"
+      - "Album"
       summary: "Create an album"
       operationId: "CreateAlbum"
       consumes:
@@ -73,6 +75,99 @@ paths:
           description: "Internal Server Error"
           schema:
             $ref: "#/definitions/ErrorInternalServerResponse"
+  /album/{idAlbum}:
+    get:
+      tags:
+      - "Album"
+      summary: "Get an album by id"
+      operationId: "GetAlbumById"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "idAlbum"
+        in: "path"
+        description: "id of album to return"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/AlbumResponse"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+    put:
+      tags:
+      - "Album"
+      summary: "Update an Album"
+      operationId: "UpdateAlbum"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "idAlbum"
+        in: "path"
+        description: "id of the album to update"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "Album updated"
+          schema:
+            $ref: "#/definitions/AlbumResponse"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+    delete:
+      tags:
+      - "Album"
+      summary: "Delete an album"
+      operationId: "DeleteItem"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "idAlbum"
+        in: "path"
+        description: "id of the album to delete"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "Album deleted"
+          schema:
+            $ref: "#/definitions/AlbumResponse"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+      
+        
 
 definitions:
   ArrayOfAlbums:
@@ -85,8 +180,6 @@ definitions:
           type: "number"
         name:
           type: "string"
-          
-
           
   AlbumInput:
     type: "object"

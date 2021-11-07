@@ -7,6 +7,7 @@ import com.pinapp.spotifyservice.service.Implementation.ArtistService;
 import com.pinapp.spotifyservice.service.Implementation.TrackService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class ArtistController {
   public List<Artist> retrieveArtistsRanked(@RequestParam(name = "limit") Optional<Integer> limit){return artistService.getTopArtists(limit.orElse(5));}
 
   @PostMapping
+  @ResponseStatus(code = HttpStatus.CREATED)
   public Artist createArtist(@RequestBody ArtistRequest artist){return artistService.createArtist(artist);}
 
   @PutMapping(path = "/{id}")
