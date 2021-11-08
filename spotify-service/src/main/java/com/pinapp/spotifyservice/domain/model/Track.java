@@ -1,4 +1,4 @@
-package com.pinapp.spotifyservice.domain;
+package com.pinapp.spotifyservice.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

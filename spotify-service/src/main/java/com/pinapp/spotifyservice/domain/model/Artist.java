@@ -1,4 +1,4 @@
-package com.pinapp.spotifyservice.domain;
+package com.pinapp.spotifyservice.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,11 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Album {
-  private Long idAlbum;
+public class Artist {
   private Long idArtist;
   private String name;
+  private String genre;
+  private String image;
 }

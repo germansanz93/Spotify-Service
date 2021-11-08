@@ -1,7 +1,7 @@
-package com.pinapp.spotifyservice.domain.mappers;
+package com.pinapp.spotifyservice.domain.mapper;
 
 import com.pinapp.spotifyservice.controller.request.TrackRequest;
-import com.pinapp.spotifyservice.domain.Track;
+import com.pinapp.spotifyservice.domain.model.Track;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;

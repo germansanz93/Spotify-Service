@@ -1,7 +1,7 @@
-package com.pinapp.spotifyservice.domain.mappers;
+package com.pinapp.spotifyservice.domain.mapper;
 
 import com.pinapp.spotifyservice.controller.request.AlbumRequest;
-import com.pinapp.spotifyservice.domain.Album;
+import com.pinapp.spotifyservice.domain.model.Album;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;

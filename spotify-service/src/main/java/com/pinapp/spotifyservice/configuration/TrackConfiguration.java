@@ -1,6 +1,6 @@
 package com.pinapp.spotifyservice.configuration;
 
-import com.pinapp.spotifyservice.domain.Track;
+import com.pinapp.spotifyservice.domain.model.Track;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
