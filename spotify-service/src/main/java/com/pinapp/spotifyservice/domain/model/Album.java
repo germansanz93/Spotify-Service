@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Table(name = "album")
 public class Album {
   @Id
-//  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id_album")
   private Long idAlbum;
   @Column(name = "id_artist")
