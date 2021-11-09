@@ -1,4 +1,4 @@
-package com.pinapp.spotifyservice.domain;
+package com.pinapp.spotifyservice.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,4 +16,5 @@ public class Track {
   private Long idAlbum;
   private Long reproductions;
   private Long duration; //Duration in ms
+
 }

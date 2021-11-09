@@ -1,6 +1,6 @@
 package com.pinapp.spotifyservice.configuration;
 
-import com.pinapp.spotifyservice.domain.Album;
+import com.pinapp.spotifyservice.domain.model.Album;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

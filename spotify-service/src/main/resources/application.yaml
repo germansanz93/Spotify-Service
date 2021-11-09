@@ -1,1 +1,28 @@
+server:
+  port: ${APPLICATION_PORT:8080}
+---
+spring:
+  application:
+    name: Spotify-Server
 
+management:
+  endpoints:
+    web:
+      base-path: /
+      path-mapping:
+        prometheus: /metrics
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+          - prometheus
+
+logging:
+  level:
+    org.springframework: ERROR
+    com.mkyong: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    file: "%d %p %c{1.} [%t] %m%n"
+  file: app.log

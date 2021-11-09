@@ -1,22 +1,35 @@
 package com.pinapp.spotifyservice.controller;
 
-import com.pinapp.spotifyservice.domain.Artist;
-import com.pinapp.spotifyservice.service.ArtistService;
+import com.pinapp.spotifyservice.controller.request.ArtistRequest;
+import com.pinapp.spotifyservice.domain.model.Artist;
+import com.pinapp.spotifyservice.service.Implementation.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/artists")
+@RequestMapping(path = "/artist")
 public class ArtistController {
 
   @Autowired
   private ArtistService artistService;
 
-  @GetMapping(path = "/")
+  @GetMapping
   public List<Artist> retrieveArtist(){return artistService.getArtists();}
+
+  @GetMapping(path = "/{id}")
+  public Artist retrieveArtist(@PathVariable Long id){return artistService.getArtist(id);}
+
+  @PostMapping
+  public Artist createArtist(@RequestBody ArtistRequest artist){return artistService.createArtist(artist);}
+
+  @PutMapping(path = "/{id}")
+  public Artist updateArtist(@PathVariable Long id, @RequestBody ArtistRequest request){
+    request.setIdArtist(id);
+    return artistService.updateArtist(request);
+  }
+
+  @DeleteMapping(path = "/{id}")
+  public Artist deleteArtist(@PathVariable Long id){return artistService.deleteArtist(id);}
 }
