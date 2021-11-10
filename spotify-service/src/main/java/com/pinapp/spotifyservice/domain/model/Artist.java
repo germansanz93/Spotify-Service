@@ -15,4 +15,5 @@ public class Artist {
   private String genre;
   private String image;
   private Long reproductions;
+
 }

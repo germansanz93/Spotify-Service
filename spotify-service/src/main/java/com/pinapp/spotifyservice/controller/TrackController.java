@@ -28,7 +28,6 @@ public class TrackController {
 
   @GetMapping(path = "/rank")
   public List<Track> retrieveTopTracks(@RequestParam(name = "limit") Optional<Integer> limit){return trackService.getRankedTracks(limit.orElse(5));}
-
   @PostMapping
   public Track createTrack(@Validated @RequestBody TrackRequest request){
     return trackService.createTrack(request);

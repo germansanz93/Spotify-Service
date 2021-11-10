@@ -4,6 +4,7 @@ import com.pinapp.spotifyservice.controller.request.ArtistRequest;
 import com.pinapp.spotifyservice.domain.model.Artist;
 import com.pinapp.spotifyservice.domain.mapper.ArtistMapper;
 import com.pinapp.spotifyservice.domain.model.Track;
+
 import com.pinapp.spotifyservice.service.IArtistService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import java.util.stream.Collectors;
 @Service
 public class ArtistService implements IArtistService {
 
-  @Autowired
   public TrackService trackService;
 
   @Autowired

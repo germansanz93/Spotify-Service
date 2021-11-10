@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
@@ -65,7 +67,7 @@ public class TrackService implements ITrackService {
   public List<Track> getRankedTracks(int limit){
     return trackList.stream().sorted(Comparator.comparing(Track::getReproductions).reversed()).limit(limit).collect(Collectors.toList());
   }
-
+  
   public Track getTrack(Long id){
     log.info(String.format("getTrackById request with id: %d", id));
     return trackList.stream().filter(track -> Objects.equals(track.getId(), id)).findFirst().orElse(null);
@@ -109,6 +111,7 @@ public class TrackService implements ITrackService {
       track.get().setReproductions(track.get().getReproductions() + 1);
       trackList.set(track.get().getId().intValue()-1, track.get());
       artistService.updateArtistReproductions(track.get().getIdArtist());
+
     }
     return track.get();
   }
