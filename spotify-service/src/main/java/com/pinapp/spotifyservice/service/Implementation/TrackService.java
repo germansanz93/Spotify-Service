@@ -99,6 +99,7 @@ public class TrackService implements ITrackService {
     }else {
       log.error("The track doesn't exist");
       throw new TrackNotExistException("The track doesn't exist");
+
     }
     log.info(String.format("updateTrack request, updated with id: %d", idTrack));
     return track;
@@ -112,6 +113,7 @@ public class TrackService implements ITrackService {
       log.error("The track doesn't exist");
       throw new TrackNotExistException("The track doesn't exist");
     }
+
     log.info(String.format("deleteTrack request, deleted with id: %d", id));
     return track.get();
   }

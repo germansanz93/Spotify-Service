@@ -1,5 +1,6 @@
 package com.pinapp.spotifyservice.controller;
 
+
 import com.pinapp.spotifyservice.exception.AlbumNotExistException;
 import com.pinapp.spotifyservice.exception.ArtistNotExistException;
 import com.pinapp.spotifyservice.exception.TrackNotExistException;
@@ -56,5 +57,4 @@ public class GlobalControllerAdvice {
     errors.put(fieldName, ex.getMessage());
     return errors;
   }
-
 }
