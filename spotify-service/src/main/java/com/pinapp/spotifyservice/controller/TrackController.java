@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/track")
@@ -24,6 +26,8 @@ public class TrackController {
     return trackService.getTrack(id);
   }
 
+  @GetMapping(path = "/rank")
+  public List<Track> retrieveTopTracks(@RequestParam(name = "limit") Optional<Integer> limit){return trackService.getRankedTracks(limit.orElse(5));}
   @PostMapping
   public Track createTrack(@Validated @RequestBody TrackRequest request){
     return trackService.createTrack(request);
