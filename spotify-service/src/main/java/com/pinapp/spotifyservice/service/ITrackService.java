@@ -25,6 +25,6 @@ public interface ITrackService {
 
   void deleteTrack(Long id);
 
-//  Track playTrack(Long id);
+  Track playTrack(Long id);
 
 }

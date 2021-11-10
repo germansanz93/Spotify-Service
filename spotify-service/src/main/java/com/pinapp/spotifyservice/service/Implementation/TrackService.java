@@ -1,10 +1,8 @@
 package com.pinapp.spotifyservice.service.Implementation;
 
 import com.pinapp.spotifyservice.controller.request.TrackRequest;
-import com.pinapp.spotifyservice.domain.model.Album;
 import com.pinapp.spotifyservice.domain.model.Track;
 import com.pinapp.spotifyservice.domain.mapper.TrackMapper;
-import com.pinapp.spotifyservice.exception.AlbumExistException;
 import com.pinapp.spotifyservice.exception.AlbumNotExistException;
 import com.pinapp.spotifyservice.exception.TrackExistException;
 import com.pinapp.spotifyservice.exception.TrackNotExistException;
@@ -31,12 +29,12 @@ public class TrackService implements ITrackService {
   @Autowired
   public TrackMapper trackMapper;
 
-  public List<Track> getTracks(){
+  public List<Track> getTracks() {
     log.info("getTracks request");
     return StreamSupport.stream(trackRepository.findAll().spliterator(), false).collect(Collectors.toList());
   }
 
-  public List<Track> getTracksByArtist(Long idArtist){
+  public List<Track> getTracksByArtist(Long idArtist) {
     log.info(String.format("getTracksByArtist request with idArtist: %d", idArtist));
     return getTracks()
         .stream()
@@ -44,7 +42,7 @@ public class TrackService implements ITrackService {
         .collect(Collectors.toList());
   }
 
-  public List<Track> getArtistRankedTracks(Long idArtist){
+  public List<Track> getArtistRankedTracks(Long idArtist) {
     log.info(String.format("getTracksByArtist request with idArtist: %d but ranked", idArtist));
     return getTracksByArtist(idArtist)
         .stream()
@@ -52,34 +50,34 @@ public class TrackService implements ITrackService {
         .collect(Collectors.toList());
   }
 
-  public List<Track> getArtistRankedTracks(Long idArtist,int limit){
+  public List<Track> getArtistRankedTracks(Long idArtist, int limit) {
     log.info(String.format("getTracksByArtist request with idArtist: %d but ranked and limited %d", idArtist, limit));
     return getArtistRankedTracks(idArtist).subList(0, limit);
   }
 
-  public List<Track> getRankedTracks(int limit){
+  public List<Track> getRankedTracks(int limit) {
     return getTracks().stream().sorted(Comparator.comparing(Track::getReproductions).reversed()).limit(limit).collect(Collectors.toList());
   }
 
-  public Track getTrack(Long id){
+  public Track getTrack(Long id) {
     return trackRepository.findById(id).orElseThrow(() -> new AlbumNotExistException(String.format("Artist with id %d doesn't exist!", id)));
   }
 
-  public Track createTrack(TrackRequest request){
+  public Track createTrack(TrackRequest request) {
     Track track = trackMapper.apply(request);
     Long id = track.getId();
     Track savedTrack;
-    if(id != null && trackRepository.findById(id).isPresent()){
+    if (id != null && trackRepository.findById(id).isPresent()) {
       log.error(String.format("the id %d is already taken", id));
       throw new TrackExistException(String.format("the id %d is already taken", id));
-    } else{
+    } else {
       savedTrack = trackRepository.save(track);
       log.info("createTrack request... created");
     }
     return savedTrack;
   }
 
-  public Track updateTrack(TrackRequest request){
+  public Track updateTrack(TrackRequest request) {
     Track track = trackMapper.apply(request);
     log.info(track.toString());
     Long id = track.getId();
@@ -87,21 +85,20 @@ public class TrackService implements ITrackService {
     return trackRepository.save(track);
   }
 
-  public void deleteTrack(Long id){
+  public void deleteTrack(Long id) {
     trackRepository.findById(id).orElseThrow(() -> new AlbumNotExistException(String.format("Track with id %d doesn't exist!", id)));
     trackRepository.deleteById(id);
   }
 
-//  public Track playTrack(Long idTrack){
-//    Optional<Track> track = trackList.stream().filter(t -> Objects.equals(t.getId(), idTrack)).findFirst();
-//    if(track.isPresent()){
-//      track.get().setReproductions(track.get().getReproductions() + 1);
-//      trackList.set(track.get().getId().intValue()-1, track.get());
-//      artistService.updateArtistReproductions(track.get().getArtist().getIdArtist());
-//    } else {
-//      log.error("The track doesn't exist");
-//      throw new TrackNotExistException("The track doesn't exist");
-//    }
-//    return track.get();
-//  }
+  public Track playTrack(Long idTrack) {
+    try {
+      Track track = getTrack(idTrack);
+      track.setReproductions(track.getReproductions() + 1);
+      trackRepository.save(track);
+      return track;
+    } catch (TrackNotExistException e) {
+      log.error("The track doesn't exist");
+      throw e;
+    }
+  }
 }

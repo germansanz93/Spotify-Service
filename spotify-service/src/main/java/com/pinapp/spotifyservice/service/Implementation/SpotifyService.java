@@ -14,9 +14,8 @@ public class SpotifyService implements ISpotifyService {
   @Autowired
   private TrackService trackService;
 
-//  public Track playTrack(Long id){
-//    log.info(String.format("playTrack request with id: %d", id));
-//    return trackService.playTrack(id);
-//  }
-
+  public Track playTrack(Long id){
+    log.info(String.format("playTrack request with id: %d", id));
+    return trackService.playTrack(id);
+  }
 }
