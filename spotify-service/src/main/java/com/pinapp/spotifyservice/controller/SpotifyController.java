@@ -20,8 +20,8 @@ public class SpotifyController {
   @Autowired
   SpotifyService spotifyService;
 
-  @GetMapping(path = "/play/track/{id}")
-  public Track retrieveTrack(@PathVariable Long id){return spotifyService.playTrack(id);}
+//  @GetMapping(path = "/play/track/{id}")
+//  public Track retrieveTrack(@PathVariable Long id){return spotifyService.playTrack(id);}
 
 
 }

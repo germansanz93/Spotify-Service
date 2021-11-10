@@ -5,6 +5,6 @@ import com.pinapp.spotifyservice.domain.model.Track;
 
 public interface ISpotifyService {
 
-  Track playTrack(Long id);
+//  Track playTrack(Long id);
 
 }

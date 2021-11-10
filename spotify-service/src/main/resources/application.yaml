@@ -9,10 +9,11 @@ spring:
     username: sa
     password:
     driverClassName: org.h2.Driver
+    initialization-mode: always
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    generate-ddl: true
-    hibernate.ddl-auto: create-drop
+    generate-ddl: false
+    hibernate.ddl-auto: none
   h2:
     console.enabled: true
 

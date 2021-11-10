@@ -1,25 +1,31 @@
 package com.pinapp.spotifyservice.service.Implementation;
 
 import com.pinapp.spotifyservice.controller.request.ArtistRequest;
-import com.pinapp.spotifyservice.domain.model.Artist;
 import com.pinapp.spotifyservice.domain.mapper.ArtistMapper;
+import com.pinapp.spotifyservice.domain.mapper.ArtistRankedMapper;
+import com.pinapp.spotifyservice.domain.model.Artist;
+import com.pinapp.spotifyservice.domain.model.ArtistRanked;
 import com.pinapp.spotifyservice.domain.model.Track;
+import com.pinapp.spotifyservice.exception.ArtistExistException;
 import com.pinapp.spotifyservice.exception.ArtistNotExistException;
 import com.pinapp.spotifyservice.repository.ArtistRepository;
+import com.pinapp.spotifyservice.repository.TrackRepository;
 import com.pinapp.spotifyservice.service.IArtistService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 
 @Slf4j
 @Service
 public class ArtistService implements IArtistService {
+
+  @Autowired
+  public TrackRepository trackRepository;
 
   @Autowired
   public ArtistRepository artistRepository;
@@ -31,79 +37,53 @@ public class ArtistService implements IArtistService {
   public ArtistMapper artistMapper;
 
   @Autowired
-  @Qualifier("artists")
-  private List<Artist> artists;
+  public ArtistRankedMapper artistRankedMapper;
 
-  @PostConstruct
-  public void init() {
-    artists.stream().forEach(artist -> artistRepository.save(artist));
-  }
-
-  private List<Artist> artistsList;
 
   public List<Artist> getArtists(){
     log.info("getArtists request");
-    return artistsList;
+    return StreamSupport.stream(artistRepository.findAll().spliterator(), false).collect(Collectors.toList());
   }
 
   public Artist getArtist(Long id){
     log.info(String.format("getArtistById request with id: %d", id));
-    return artistsList.stream().filter(a -> Objects.equals(a.getIdArtist(), id))
-        .findFirst().orElse(null);
+    return artistRepository.findById(id).orElseThrow(() -> new ArtistNotExistException(String.format("Artist with id %d doesn't exist!", id)));
   }
 
   public Long artistReproductions(Long id){
     return trackService.getTracksByArtist(id).stream().mapToLong(Track::getReproductions).sum();
   }
 
-  public void updateArtistReproductions(Long idArtist){
-    Artist artist = getArtist(idArtist);
-    artist.setReproductions(artistReproductions(idArtist));
-    log.info(artistReproductions(idArtist).toString());
-    artistsList.set(idArtist.intValue()-1, artist);
-  }
+  public List<ArtistRanked> getTopArtists(int limit) {
+    List<ArtistRanked> rankedArtists =  getArtists().stream().map(artist -> artistRankedMapper.apply(artist)).collect(Collectors.toList());
+    rankedArtists.forEach(artistRanked -> artistRanked.setReproductions(artistReproductions(artistRanked.getIdArtist())));
+    return  rankedArtists.stream().sorted(Comparator.comparingLong(ArtistRanked::getReproductions).reversed()).collect(Collectors.toList());
+  };
 
-  public List<Artist> getTopArtists(int limit){
-    return artistsList.stream().sorted(Comparator.comparingDouble(Artist::getReproductions).reversed()).limit(limit).collect(Collectors.toList());
-  }
 
   public Artist createArtist(ArtistRequest request){
-    Artist artist =  artistMapper.apply(request);
-    Long id = 1L;
-    if(artistsList.size() > 0) id = artistsList.get(artistsList.size() - 1).getIdArtist() + 1L;
-    artist.setIdArtist(id);
-    artist.setReproductions(artistReproductions(id));
-    artistsList.add(artist);
-    log.info(String.format("createArtist request, created with id: %d", id));
-    return artist;
+    Artist artist = artistMapper.apply(request);
+    Long id = artist.getIdArtist();
+    Artist savedArtist;
+    if(id != null && artistRepository.findById(id).isPresent()){
+      log.error(String.format("the id %d is already taken", id));
+      throw new ArtistExistException(String.format("the id %d is already taken", id));
+    } else{
+      savedArtist = artistRepository.save(artist);
+      log.info("createArtist request... created");
+    }
+    return savedArtist;
   }
 
   public Artist updateArtist(ArtistRequest request){
     Artist artist = artistMapper.apply(request);
-    final Long idArtist = artist.getIdArtist();
-    Optional<Artist> foundArtist = artists.stream().filter(a -> Objects.equals(a.getIdArtist(), idArtist)).findFirst();
-
-    if (foundArtist.isPresent()){
-      artistsList.set(artist.getIdArtist().intValue()-1, artist);
-    } else {
-      log.info("artist not found");
-      throw new ArtistNotExistException("The track doesn't exist");
-    }
-    log.info(String.format("updateArtist request, updated with id: %d", idArtist));
-    return artist;
+    Long id = artist.getIdArtist();
+    artistRepository.findById(id).orElseThrow(() -> new ArtistNotExistException(String.format("Artist with id %d doesn't exist!", id)));
+    return artistRepository.save(artist);
   }
 
-  public Artist deleteArtist(Long id){
-    Optional<Artist> artist = artistsList.stream().filter(a -> Objects.equals(a.getIdArtist(), id)).findFirst();
-    log.info(String.format("deleteArtist request, deleted with id: %d", id));
-    if(artist.isPresent()){
-      artistsList.remove(artist.get());
-    }
-    else {
-      log.info("artist not found, nothing will be deleted");
-      throw new ArtistNotExistException("The track doesn't exist");
-    }
-    return artist.get();
+  public void deleteArtist(Long id) {
+    artistRepository.findById(id).orElseThrow(() -> new ArtistNotExistException(String.format("Artist with id %d doesn't exist!", id)));
+    artistRepository.deleteById(id);
   }
-
 }

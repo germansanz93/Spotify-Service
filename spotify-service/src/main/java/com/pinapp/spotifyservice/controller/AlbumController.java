@@ -43,7 +43,5 @@ public class AlbumController {
   }
 
   @DeleteMapping(path = "/{id}")
-  public Album deleteAlbum( @PathVariable Long id ){
-    return albumService.deleteAlbum(id);
-  }
+  public void deleteAlbum( @PathVariable Long id ){albumService.deleteAlbum(id);}
 }

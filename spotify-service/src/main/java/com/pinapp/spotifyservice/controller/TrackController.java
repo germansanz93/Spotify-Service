@@ -43,7 +43,7 @@ public class TrackController {
   }
 
   @DeleteMapping(path="/{id}")
-  public Track deleteTrack(@PathVariable Long id){
-    return trackService.deleteTrack(id);
+  public void deleteTrack(@PathVariable Long id){
+    trackService.deleteTrack(id);
   }
 }

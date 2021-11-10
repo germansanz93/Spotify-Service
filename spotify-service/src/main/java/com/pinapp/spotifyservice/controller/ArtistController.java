@@ -2,6 +2,7 @@ package com.pinapp.spotifyservice.controller;
 
 import com.pinapp.spotifyservice.controller.request.ArtistRequest;
 import com.pinapp.spotifyservice.domain.model.Artist;
+import com.pinapp.spotifyservice.domain.model.ArtistRanked;
 import com.pinapp.spotifyservice.domain.model.Track;
 import com.pinapp.spotifyservice.service.Implementation.ArtistService;
 import com.pinapp.spotifyservice.service.Implementation.TrackService;
@@ -11,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -37,7 +37,7 @@ public class ArtistController {
   }
 
   @GetMapping(path = "/rank")
-  public List<Artist> retrieveArtistsRanked(@RequestParam(name = "limit") Optional<Integer> limit){return artistService.getTopArtists(limit.orElse(5));}
+  public List<ArtistRanked> retrieveArtistsRanked(@RequestParam(name = "limit") Optional<Integer> limit){return artistService.getTopArtists(limit.orElse(5));}
 
   @PostMapping
   @ResponseStatus(code = HttpStatus.CREATED)
@@ -50,5 +50,5 @@ public class ArtistController {
   }
 
   @DeleteMapping(path = "/{id}")
-  public Artist deleteArtist(@PathVariable Long id){return artistService.deleteArtist(id);}
+  public void deleteArtist(@PathVariable Long id){ artistService.deleteArtist(id);}
 }

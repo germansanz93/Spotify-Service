@@ -2,6 +2,7 @@ package com.pinapp.spotifyservice.service;
 
 import com.pinapp.spotifyservice.controller.request.ArtistRequest;
 import com.pinapp.spotifyservice.domain.model.Artist;
+import com.pinapp.spotifyservice.domain.model.ArtistRanked;
 
 import java.util.List;
 
@@ -11,12 +12,12 @@ public interface IArtistService {
 
   Artist getArtist(Long id);
 
-  List<Artist> getTopArtists(int limit);
+  List<ArtistRanked> getTopArtists(int limit);
 
   Artist createArtist(ArtistRequest request);
 
   Artist updateArtist(ArtistRequest request);
 
-  Artist deleteArtist(Long id);
+  void deleteArtist(Long id);
 
 }

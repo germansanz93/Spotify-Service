@@ -23,8 +23,8 @@ public interface ITrackService {
 
   Track updateTrack(TrackRequest request);
 
-  Track deleteTrack(Long id);
+  void deleteTrack(Long id);
 
-  Track playTrack(Long id);
+//  Track playTrack(Long id);
 
 }
