@@ -81,6 +81,7 @@ public class AlbumService implements IAlbumService {
       log.error("The album doesn't exist");
       throw new AlbumNotExistException("The album doesn't exist!");
     }
+
     return album.get();
   }
 }
