@@ -8,8 +8,9 @@ import com.pinapp.spotifyservice.domain.model.ArtistRanked;
 import com.pinapp.spotifyservice.domain.model.Track;
 import com.pinapp.spotifyservice.exception.ArtistExistException;
 import com.pinapp.spotifyservice.exception.ArtistNotExistException;
-import com.pinapp.spotifyservice.repository.ArtistRepository;
-import com.pinapp.spotifyservice.repository.TrackRepository;
+import com.pinapp.spotifyservice.repository.IAlbumRepository;
+import com.pinapp.spotifyservice.repository.IArtistRepository;
+import com.pinapp.spotifyservice.repository.ITrackRepository;
 import com.pinapp.spotifyservice.service.IArtistService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,13 @@ import java.util.stream.StreamSupport;
 public class ArtistService implements IArtistService {
 
   @Autowired
-  public TrackRepository trackRepository;
+  public ITrackRepository trackRepository;
 
   @Autowired
-  public ArtistRepository artistRepository;
+  public IArtistRepository artistRepository;
+
+  @Autowired
+  public IAlbumRepository albumRepository;
 
   @Autowired
   public TrackService trackService;
@@ -84,6 +88,8 @@ public class ArtistService implements IArtistService {
 
   public void deleteArtist(Long id) {
     artistRepository.findById(id).orElseThrow(() -> new ArtistNotExistException(String.format("Artist with id %d doesn't exist!", id)));
+    trackRepository.deleteByIdArtist(id);
+    albumRepository.deleteByIdArtist(id);
     artistRepository.deleteById(id);
   }
 }

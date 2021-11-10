@@ -6,7 +6,7 @@ import com.pinapp.spotifyservice.domain.mapper.TrackMapper;
 import com.pinapp.spotifyservice.exception.AlbumNotExistException;
 import com.pinapp.spotifyservice.exception.TrackExistException;
 import com.pinapp.spotifyservice.exception.TrackNotExistException;
-import com.pinapp.spotifyservice.repository.TrackRepository;
+import com.pinapp.spotifyservice.repository.ITrackRepository;
 import com.pinapp.spotifyservice.service.ITrackService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.stream.StreamSupport;
 public class TrackService implements ITrackService {
 
   @Autowired
-  public TrackRepository trackRepository;
+  public ITrackRepository trackRepository;
 
   @Autowired
   public ArtistService artistService;

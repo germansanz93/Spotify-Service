@@ -2,7 +2,7 @@ package com.pinapp.spotifyservice.domain.mapper;
 
 import com.pinapp.spotifyservice.controller.request.AlbumRequest;
 import com.pinapp.spotifyservice.domain.model.Album;
-import com.pinapp.spotifyservice.repository.ArtistRepository;
+import com.pinapp.spotifyservice.repository.IArtistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import java.util.function.Function;
 public class AlbumMapper implements Function<AlbumRequest, Album> {
 
   @Autowired
-  private ArtistRepository artistRepository;
+  private IArtistRepository artistRepository;
 
   public Album apply(AlbumRequest albumRequest){
     return Album.builder()

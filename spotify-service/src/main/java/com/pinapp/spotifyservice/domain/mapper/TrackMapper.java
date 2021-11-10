@@ -2,8 +2,8 @@ package com.pinapp.spotifyservice.domain.mapper;
 
 import com.pinapp.spotifyservice.controller.request.TrackRequest;
 import com.pinapp.spotifyservice.domain.model.Track;
-import com.pinapp.spotifyservice.repository.AlbumRepository;
-import com.pinapp.spotifyservice.repository.ArtistRepository;
+import com.pinapp.spotifyservice.repository.IAlbumRepository;
+import com.pinapp.spotifyservice.repository.IArtistRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,10 +15,10 @@ import java.util.function.Function;
 public class TrackMapper implements Function<TrackRequest, Track> {
 
   @Autowired
-  private ArtistRepository artistRepository;
+  private IArtistRepository artistRepository;
 
   @Autowired
-  private AlbumRepository albumRepository;
+  private IAlbumRepository albumRepository;
 
 
   public Track apply(TrackRequest trackRequest) {

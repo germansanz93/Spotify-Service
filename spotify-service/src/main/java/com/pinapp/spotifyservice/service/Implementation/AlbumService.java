@@ -5,7 +5,7 @@ import com.pinapp.spotifyservice.domain.model.Album;
 import com.pinapp.spotifyservice.domain.mapper.AlbumMapper;
 import com.pinapp.spotifyservice.exception.AlbumExistException;
 import com.pinapp.spotifyservice.exception.AlbumNotExistException;
-import com.pinapp.spotifyservice.repository.AlbumRepository;
+import com.pinapp.spotifyservice.repository.IAlbumRepository;
 import com.pinapp.spotifyservice.service.IAlbumService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.stream.StreamSupport;
 public class AlbumService implements IAlbumService {
 
   @Autowired
-  private AlbumRepository albumRepository;
+  private IAlbumRepository albumRepository;
 
   @Autowired
   private AlbumMapper albumMapper;
@@ -32,7 +32,7 @@ public class AlbumService implements IAlbumService {
 
   public Album getAlbum(Long id){
     log.info(String.format("getAlbum request with id: %d", id));
-    return albumRepository.findById(id).orElseThrow(() -> new AlbumNotExistException(String.format("Artist with id %d doesn't exist!", id)));
+    return albumRepository.findById(id).orElseThrow(() -> new AlbumNotExistException(String.format("Album with id %d doesn't exist!", id)));
   }
 
   public Album createAlbum(AlbumRequest request){
