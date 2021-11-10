@@ -3,6 +3,7 @@ package com.pinapp.spotifyservice.service.Implementation;
 import com.pinapp.spotifyservice.controller.request.ArtistRequest;
 import com.pinapp.spotifyservice.domain.model.Artist;
 import com.pinapp.spotifyservice.domain.mapper.ArtistMapper;
+import com.pinapp.spotifyservice.domain.model.Track;
 import com.pinapp.spotifyservice.service.IArtistService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +11,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
 public class ArtistService implements IArtistService {
+
+  @Autowired
+  public TrackService trackService;
 
   @Autowired
   public ArtistMapper artistMapper;
@@ -43,6 +46,21 @@ public class ArtistService implements IArtistService {
     log.info(String.format("getArtistById request with id: %d", id));
     return artistsList.stream().filter(a -> Objects.equals(a.getIdArtist(), id))
         .findFirst().orElse(null);
+  }
+
+  public Long artistReproductions(Long id){
+    return trackService.getTracksByArtist(id).stream().mapToLong(Track::getReproductions).sum();
+  }
+
+  public void updateArtistReproductions(Long idArtist){
+    Artist artist = getArtist(idArtist);
+    artist.setReproductions(artistReproductions(idArtist));
+    log.info(artistReproductions(idArtist).toString());
+    artistsList.set(idArtist.intValue()-1, artist);
+  }
+
+  public List<Artist> getTopArtists(int limit){
+    return artistsList.stream().sorted(Comparator.comparingDouble(Artist::getReproductions).reversed()).limit(limit).collect(Collectors.toList());
   }
 
   public Artist createArtist(ArtistRequest request){
@@ -71,8 +89,13 @@ public class ArtistService implements IArtistService {
 
   public Artist deleteArtist(Long id){
     Optional<Artist> artist = artistsList.stream().filter(a -> Objects.equals(a.getIdArtist(), id)).findFirst();
-    artistsList.remove(artist.get());
     log.info(String.format("deleteArtist request, deleted with id: %d", id));
+    if(artist.isPresent()){
+      artistsList.remove(artist.get());
+    }
+    else {
+      log.info("artist not found, nothing will be deleted");
+    }
     return artist.get();
   }
 

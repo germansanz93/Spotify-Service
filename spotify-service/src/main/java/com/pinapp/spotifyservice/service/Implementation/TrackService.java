@@ -10,14 +10,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class TrackService implements ITrackService {
+
+  @Autowired
+  public ArtistService artistService;
 
   @Autowired
   public TrackMapper trackMapper;
@@ -37,6 +39,31 @@ public class TrackService implements ITrackService {
   public List<Track> getTracks(){
     log.info("getTracks request");
     return trackList;
+  }
+
+  public List<Track> getTracksByArtist(Long idArtist){
+    log.info(String.format("getTracksByArtist request with idArtist: %d", idArtist));
+    return trackList
+        .stream()
+        .filter(track -> Objects.equals(track.getIdArtist(), idArtist))
+        .collect(Collectors.toList());
+  }
+
+  public List<Track> getArtistRankedTracks(Long idArtist){
+    log.info(String.format("getTracksByArtist request with idArtist: %d but ranked", idArtist));
+    return getTracksByArtist(idArtist)
+        .stream()
+        .sorted(Comparator.comparing(Track::getReproductions).reversed())
+        .collect(Collectors.toList());
+  }
+
+  public List<Track> getArtistRankedTracks(Long idArtist,int limit){
+    log.info(String.format("getTracksByArtist request with idArtist: %d but ranked and limited %d", idArtist, limit));
+    return getArtistRankedTracks(idArtist).subList(0, limit);
+  }
+
+  public List<Track> getRankedTracks(int limit){
+    return trackList.stream().sorted(Comparator.comparing(Track::getReproductions).reversed()).limit(limit).collect(Collectors.toList());
   }
 
   public Track getTrack(Long id){
@@ -80,7 +107,8 @@ public class TrackService implements ITrackService {
     Optional<Track> track = trackList.stream().filter(t -> Objects.equals(t.getId(), idTrack)).findFirst();
     if(track.isPresent()){
       track.get().setReproductions(track.get().getReproductions() + 1);
-      trackList.set(track.get().getId().intValue(), track.get());
+      trackList.set(track.get().getId().intValue()-1, track.get());
+      artistService.updateArtistReproductions(track.get().getIdArtist());
     }
     return track.get();
   }
