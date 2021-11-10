@@ -6,6 +6,7 @@ import com.pinapp.spotifyservice.domain.mapper.AlbumMapper;
 import com.pinapp.spotifyservice.exception.AlbumExistException;
 import com.pinapp.spotifyservice.exception.AlbumNotExistException;
 import com.pinapp.spotifyservice.repository.IAlbumRepository;
+import com.pinapp.spotifyservice.repository.ITrackRepository;
 import com.pinapp.spotifyservice.service.IAlbumService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class AlbumService implements IAlbumService {
 
   @Autowired
   private IAlbumRepository albumRepository;
+
+  @Autowired
+  private ITrackRepository trackrepository;
 
   @Autowired
   private AlbumMapper albumMapper;
@@ -58,6 +62,7 @@ public class AlbumService implements IAlbumService {
 
   public void deleteAlbum(Long id){
     albumRepository.findById(id).orElseThrow(() -> new AlbumNotExistException(String.format("Album with id %d doesn't exist!", id)));
+    trackrepository.deleteByIdAlbum(id);
     albumRepository.deleteById(id);
   }
 }

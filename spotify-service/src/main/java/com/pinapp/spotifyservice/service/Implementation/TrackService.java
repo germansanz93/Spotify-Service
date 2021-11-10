@@ -65,6 +65,7 @@ public class TrackService implements ITrackService {
 
   public Track createTrack(TrackRequest request) {
     Track track = trackMapper.apply(request);
+    track.setReproductions(0L);
     Long id = track.getId();
     Track savedTrack;
     if (id != null && trackRepository.findById(id).isPresent()) {
@@ -81,7 +82,8 @@ public class TrackService implements ITrackService {
     Track track = trackMapper.apply(request);
     log.info(track.toString());
     Long id = track.getId();
-    trackRepository.findById(id).orElseThrow(() -> new TrackNotExistException(String.format("Track with id %d doesn't exist!", id)));
+    Track foundTrack = trackRepository.findById(id).orElseThrow(() -> new TrackNotExistException(String.format("Track with id %d doesn't exist!", id)));
+    track.setReproductions(foundTrack.getReproductions());
     return trackRepository.save(track);
   }
 

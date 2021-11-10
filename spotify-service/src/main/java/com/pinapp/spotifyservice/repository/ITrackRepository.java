@@ -14,4 +14,9 @@ public interface ITrackRepository extends CrudRepository<Track, Long> {
   @Transactional
   @Query(value = "DELETE FROM track WHERE id_artist = ?1", nativeQuery = true)
   public void deleteByIdArtist(Long id);
+
+  @Modifying
+  @Transactional
+  @Query(value = "DELETE FROM track WHERE id_album = ?1", nativeQuery = true)
+  public void deleteByIdAlbum(Long id);
 }
