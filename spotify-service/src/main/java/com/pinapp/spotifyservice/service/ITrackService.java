@@ -9,7 +9,6 @@ public interface ITrackService {
 
   List getTracks();
 
-
   List getTracksByArtist(Long idArtist);
 
   List getArtistRankedTracks(Long idArtist);

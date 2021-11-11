@@ -4,6 +4,7 @@ import com.pinapp.spotifyservice.controller.request.TrackRequest;
 import com.pinapp.spotifyservice.domain.model.Track;
 import com.pinapp.spotifyservice.service.Implementation.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,9 @@ public class TrackController {
 
   @GetMapping(path = "/rank")
   public List<Track> retrieveTopTracks(@RequestParam(name = "limit") Optional<Integer> limit){return trackService.getRankedTracks(limit.orElse(5));}
+
   @PostMapping
+  @ResponseStatus(code = HttpStatus.CREATED)
   public Track createTrack(@Validated @RequestBody TrackRequest request){
     return trackService.createTrack(request);
   }

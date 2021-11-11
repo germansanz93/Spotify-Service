@@ -2,13 +2,12 @@ package com.pinapp.spotifyservice.controller;
 
 import com.pinapp.spotifyservice.controller.request.ArtistRequest;
 import com.pinapp.spotifyservice.domain.model.Artist;
-
 import com.pinapp.spotifyservice.domain.model.Track;
 import com.pinapp.spotifyservice.service.Implementation.ArtistService;
 import com.pinapp.spotifyservice.service.Implementation.TrackService;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,14 +25,11 @@ public class ArtistController {
 
   @Autowired
   private TrackService trackService;
-
-
   @GetMapping
   public List<Artist> retrieveArtist(){return artistService.getArtists();}
 
   @GetMapping(path = "/{id}")
   public Artist retrieveArtist(@PathVariable Long id){return artistService.getArtist(id);}
-
 
   @GetMapping(path = "/{id}/songs/rank")
   public List<Track> retrieveArtistRankedSongs(@PathVariable Long id, @RequestParam(name = "limit") Optional<Integer> limit){
@@ -44,6 +40,7 @@ public class ArtistController {
   public List<Artist> retrieveArtistsRanked(@RequestParam(name = "limit") Optional<Integer> limit){return artistService.getTopArtists(limit.orElse(5));}
 
   @PostMapping
+  @ResponseStatus(code = HttpStatus.CREATED)
   public Artist createArtist(@RequestBody ArtistRequest artist){return artistService.createArtist(artist);}
 
   @PutMapping(path = "/{id}")

@@ -3,6 +3,7 @@ package com.pinapp.spotifyservice.service.Implementation;
 import com.pinapp.spotifyservice.controller.request.AlbumRequest;
 import com.pinapp.spotifyservice.domain.model.Album;
 import com.pinapp.spotifyservice.domain.mapper.AlbumMapper;
+import com.pinapp.spotifyservice.exception.AlbumNotExistException;
 import com.pinapp.spotifyservice.service.IAlbumService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,8 @@ public class AlbumService implements IAlbumService {
     if(foundAlbum.isPresent()){
       albumsList.set(album.getIdAlbum().intValue()-1, album);
     }else {
-      album = null;
+      log.error("The album doesn't exist");
+      throw new AlbumNotExistException("The album doesn't exist!");
     }
     log.info(String.format("updateAlbum request, updated with id: %d", idAlbum));
     return album;
@@ -73,8 +75,13 @@ public class AlbumService implements IAlbumService {
 
   public Album deleteAlbum(Long id){
     Optional<Album> album = albumsList.stream().filter(a -> Objects.equals(a.getIdAlbum(), id)).findFirst();
-    albumsList.remove(album.get());
-    log.info(String.format("deleteAlbum request, deleted with id: %d", id));
+    if(album.isPresent()){ albumsList.remove(album.get());
+      log.info(String.format("deleteAlbum request, deleted with id: %d", id));
+    }else {
+      log.error("The album doesn't exist");
+      throw new AlbumNotExistException("The album doesn't exist!");
+    }
+
     return album.get();
   }
 }

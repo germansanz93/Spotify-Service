@@ -4,7 +4,7 @@ import com.pinapp.spotifyservice.controller.request.ArtistRequest;
 import com.pinapp.spotifyservice.domain.model.Artist;
 import com.pinapp.spotifyservice.domain.mapper.ArtistMapper;
 import com.pinapp.spotifyservice.domain.model.Track;
-
+import com.pinapp.spotifyservice.exception.ArtistNotExistException;
 import com.pinapp.spotifyservice.service.IArtistService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Service
 public class ArtistService implements IArtistService {
 
+  @Autowired
   public TrackService trackService;
 
   @Autowired
@@ -68,6 +69,7 @@ public class ArtistService implements IArtistService {
     Long id = 1L;
     if(artistsList.size() > 0) id = artistsList.get(artistsList.size() - 1).getIdArtist() + 1L;
     artist.setIdArtist(id);
+    artist.setReproductions(artistReproductions(id));
     artistsList.add(artist);
     log.info(String.format("createArtist request, created with id: %d", id));
     return artist;
@@ -81,7 +83,8 @@ public class ArtistService implements IArtistService {
     if (foundArtist.isPresent()){
       artistsList.set(artist.getIdArtist().intValue()-1, artist);
     } else {
-      artist = null;
+      log.info("artist not found");
+      throw new ArtistNotExistException("The track doesn't exist");
     }
     log.info(String.format("updateArtist request, updated with id: %d", idArtist));
     return artist;
@@ -95,6 +98,7 @@ public class ArtistService implements IArtistService {
     }
     else {
       log.info("artist not found, nothing will be deleted");
+      throw new ArtistNotExistException("The track doesn't exist");
     }
     return artist.get();
   }
