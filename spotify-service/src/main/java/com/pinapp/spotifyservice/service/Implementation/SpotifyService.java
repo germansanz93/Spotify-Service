@@ -20,5 +20,4 @@ public class SpotifyService implements ISpotifyService {
 
     return trackService.playTrack(id);
   }
-
 }

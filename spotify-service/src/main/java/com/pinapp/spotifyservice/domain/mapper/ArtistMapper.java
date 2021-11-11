@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ArtistMapper {
-  public Artist apply(ArtistRequest artistRequest){
+  public Artist apply(ArtistRequest artistRequest) {
     return Artist.builder()
         .idArtist(artistRequest.getIdArtist())
         .name(artistRequest.getName())
