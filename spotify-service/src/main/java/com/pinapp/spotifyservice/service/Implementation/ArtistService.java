@@ -65,7 +65,6 @@ public class ArtistService implements IArtistService {
     return rankedArtists.stream().sorted(Comparator.comparingLong(ArtistRanked::getReproductions).reversed()).collect(Collectors.toList());
   }
 
-
   public Artist createArtist(ArtistRequest request) {
     Artist artist = artistMapper.apply(request);
     Long id = artist.getIdArtist();
