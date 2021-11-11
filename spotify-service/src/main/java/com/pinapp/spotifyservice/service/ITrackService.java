@@ -13,7 +13,7 @@ public interface ITrackService {
 
   List getArtistRankedTracks(Long idArtist);
 
-  List<Track> getArtistRankedTracks(Long idArtist,int limit);
+  List<Track> getArtistRankedTracks(Long idArtist, int limit);
 
   List<Track> getRankedTracks(int limit);
 
@@ -23,7 +23,7 @@ public interface ITrackService {
 
   Track updateTrack(TrackRequest request);
 
-  Track deleteTrack(Long id);
+  void deleteTrack(Long id);
 
   Track playTrack(Long id);
 

@@ -1,18 +1,27 @@
 package com.pinapp.spotifyservice.domain.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+import javax.persistence.*;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "artist")
 public class Artist {
-  private Long idArtist;
-  private String name;
-  private String genre;
-  private String image;
-  private Long reproductions;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id_artist")
+  protected Long idArtist;
+  @Column(name = "name")
+  protected String name;
+  @Column(name = "genre")
+  protected String genre;
+  @Column(name = "image")
+  protected String image;
 }

@@ -1,9 +1,7 @@
 package com.pinapp.spotifyservice.controller;
 
 
-import com.pinapp.spotifyservice.exception.AlbumNotExistException;
-import com.pinapp.spotifyservice.exception.ArtistNotExistException;
-import com.pinapp.spotifyservice.exception.TrackNotExistException;
+import com.pinapp.spotifyservice.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,7 +19,7 @@ public class GlobalControllerAdvice {
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public Map<String,String> handlerValidationException(MethodArgumentNotValidException ex){
+  public Map<String, String> handlerValidationException(MethodArgumentNotValidException ex) {
     Map<String, String> errors = new HashMap<>();
     ex.getBindingResult().getAllErrors().forEach((error) -> {
       String fieldName = ((FieldError) error).getField();
@@ -33,7 +31,7 @@ public class GlobalControllerAdvice {
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(ArtistNotExistException.class)
-  public Map<String, String> handlerValidationException(ArtistNotExistException ex){
+  public Map<String, String> handlerValidationException(ArtistNotExistException ex) {
     Map<String, String> errors = new HashMap<>();
     String fieldName = "Error: ";
     errors.put(fieldName, ex.getMessage());
@@ -42,7 +40,7 @@ public class GlobalControllerAdvice {
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(TrackNotExistException.class)
-  public Map<String, String> handlerValidationException(TrackNotExistException ex){
+  public Map<String, String> handlerValidationException(TrackNotExistException ex) {
     Map<String, String> errors = new HashMap<>();
     String fieldName = "Error: ";
     errors.put(fieldName, ex.getMessage());
@@ -51,10 +49,38 @@ public class GlobalControllerAdvice {
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(AlbumNotExistException.class)
-  public Map<String, String> handlerValidationException(AlbumNotExistException ex){
+  public Map<String, String> handlerValidationException(AlbumNotExistException ex) {
     Map<String, String> errors = new HashMap<>();
     String fieldName = "Error: ";
     errors.put(fieldName, ex.getMessage());
     return errors;
   }
+
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(ArtistExistException.class)
+  public Map<String, String> handlerValidationException(ArtistExistException ex) {
+    Map<String, String> errors = new HashMap<>();
+    String fieldName = "Error: ";
+    errors.put(fieldName, ex.getMessage());
+    return errors;
+  }
+
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(TrackExistException.class)
+  public Map<String, String> handlerValidationException(TrackExistException ex) {
+    Map<String, String> errors = new HashMap<>();
+    String fieldName = "Error: ";
+    errors.put(fieldName, ex.getMessage());
+    return errors;
+  }
+
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(AlbumExistException.class)
+  public Map<String, String> handlerValidationException(AlbumExistException ex) {
+    Map<String, String> errors = new HashMap<>();
+    String fieldName = "Error: ";
+    errors.put(fieldName, ex.getMessage());
+    return errors;
+  }
+
 }
