@@ -37,3 +37,6 @@ build/
 
 ### enunciado ###
 ENUNCIADO.md
+
+### Docker ###
+Dockerfile
