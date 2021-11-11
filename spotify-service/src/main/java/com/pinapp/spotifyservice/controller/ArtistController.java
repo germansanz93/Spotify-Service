@@ -22,9 +22,9 @@ public class ArtistController {
   @Autowired
   private ArtistService artistService;
 
+
   @Autowired
   private TrackService trackService;
-
   @GetMapping
   public List<Artist> retrieveArtist() {
     return artistService.getArtists();
