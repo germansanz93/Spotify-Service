@@ -12,6 +12,12 @@ host: "localhost:8080"
 tags:
 - name: "Album"
   description: "Album operations"
+- name: "Artist"
+  description: "Artist operations"
+- name: "Track"
+  description: "Track operations"
+- name: "Spotify"
+  description: "General operations"
 
 schemes:
 - "https"
@@ -53,7 +59,7 @@ paths:
       - "application/json"
       parameters:
       - in: "body"
-        name: "body"
+        name: "album"
         description: "Album that needs to be added to the app"
         required: true
         schema:
@@ -113,12 +119,20 @@ paths:
       operationId: "UpdateAlbum"
       produces:
       - "application/json"
+      consumes:
+      - "application/json"
       parameters:
       - name: "idAlbum"
         in: "path"
-        description: "id of the album to update"
+        description: "id of album to update"
         required: true
         type: "number"
+      - in: "body"
+        name: "album"
+        description: "updated album data"
+        required: true
+        schema:
+          $ref: "#/definitions/AlbumInput"
       responses:
         200:
           description: "Album updated"
@@ -140,7 +154,7 @@ paths:
       tags:
       - "Album"
       summary: "Delete an album"
-      operationId: "DeleteItem"
+      operationId: "DeleteAlbum"
       produces:
       - "application/json"
       parameters:
@@ -152,8 +166,7 @@ paths:
       responses:
         200:
           description: "Album deleted"
-          schema:
-            $ref: "#/definitions/AlbumResponse"
+
         400:
           description: "Bad Request"
           schema:
@@ -166,21 +179,486 @@ paths:
           description: "Internal Server Error"
           schema:
             $ref: "#/definitions/ErrorInternalServerResponse"
-      
-        
+  
+  /artist:
+    get:
+      tags:
+      - "Artist"
+      summary: "Returns all artists"
+      operationId: "getArtists"
+      produces:
+      - "application/json"
+      responses: 
+        200:
+          description: "Ok"
+          schema: 
+            $ref: "#/definitions/ArrayOfArtists"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+    post:
+      tags:
+      - "Artist"
+      summary: "Create an artist"
+      operationId: "CreateArtist"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Artist that needs to be added to the app"
+        required: true
+        schema:
+          $ref: "#/definitions/ArtistInput"
+      responses:
+        201:
+          description: "CREATED"
+          schema:
+            $ref: "#/definitions/ArtistResponse"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+  /artist/{idArtist}:
+    get:
+      tags:
+      - "Artist"
+      summary: "Get artist by id"
+      operationId: "getArtist"
+      parameters:
+      - name: "idArtist"
+        in: "path"
+        description: "id of a to return"
+        required: true
+        type: "number"
+      produces:
+      - "application/json"
+      responses: 
+        200:
+          description: "Ok"
+          schema: 
+            $ref: "#/definitions/ArtistResponse"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+    put:
+      tags:
+      - "Artist"
+      summary: "Update an Artist"
+      operationId: "UpdateArtist"
+      produces:
+      - "application/json"
+      consumes:
+      - "application/json"
+      parameters:
+      - name: "idArtist"
+        in: "path"
+        description: "id of artist to update"
+        required: true
+        type: "number"
+      - name: "Artist"
+        in: "body"
+        description: "Artist that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/ArtistInput"
+      responses:
+        200:
+          description: "Artist updated"
+          schema:
+            $ref: "#/definitions/ArtistResponse"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+            
+    delete:
+      tags:
+      - "Artist"
+      summary: "Delete an artist"
+      operationId: "DeleteArtist"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "idArtist"
+        in: "path"
+        description: "id of the artist to delete"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "Artist deleted"
+
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse" 
+  /artist/rank:
+    get:
+      tags:
+      - "Artist"
+      summary: "Returns artists sorted by reproductions number"
+      operationId: "getRankedArtists"
+      produces:
+      - "application/json"
+      responses: 
+        200:
+          description: "Ok"
+          schema: 
+            $ref: "#/definitions/ArrayOfArtistRanked"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+  /artist/{idArtist}/songs/rank:
+    get:
+      tags:
+      - "Artist"
+      summary: "Returns all songs from an artist sorted by reproductions"
+      operationId: "getRankedTracksByArtist"
+      parameters:
+      - name: "idArtist"
+        in: "path"
+        description: "id of the artist to get ranked tracks"
+        required: true
+        type: "number"
+      produces:
+      - "application/json"
+      responses: 
+        200:
+          description: "Ok"
+          schema: 
+            $ref: "#/definitions/ArrayOfTracks"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+  /artist/{idArtist}/songs/rank/{limit}:
+    get:
+      tags:
+      - "Artist"
+      summary: "Returns songs from an artist sorted by reproductions but with a max qty of tracks"
+      operationId: "getRankedTracksByArtistLimited"
+      parameters:
+      - name: "idArtist"
+        in: "path"
+        description: "id of the artist to get ranked tracks"
+        required: true
+        type: "number"
+      - name: "limit"
+        in: "path"
+        description: "max number of tracks to get"
+        required: true
+        type: "number"
+      produces:
+      - "application/json"
+      responses: 
+        200:
+          description: "Ok"
+          schema: 
+            $ref: "#/definitions/ArrayOfTracks"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+  
+  /track:
+    get:
+      tags:
+      - "Track"
+      summary: "Returns all tracks"
+      operationId: "getTracks"
+      produces:
+      - "application/json"
+      responses: 
+        200:
+          description: "Ok"
+          schema: 
+            $ref: "#/definitions/ArrayOfTracks"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+    
+    post:
+      tags:
+      - "Track"
+      summary: "Post a track"
+      operationId: "postTrack"
+      produces:
+      - "application/json"
+      consumes:
+      - "application/json"
+      parameters:
+      - name: "Track"
+        in: "body"
+        description: "Track that needs to be added to the app"
+        required: true
+        schema:
+          $ref: "#/definitions/TrackInput"
+      responses:
+        200:
+          description: "Ok"
+          schema: 
+            $ref: "#/definitions/ArrayOfTracks"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+  /track/{id}:
+    get:
+      tags:
+      - "Track"
+      summary: "Get track by id"
+      operationId: "getTrack"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id of the track to get"
+        required: true
+        type: "number"
+      produces:
+      - "application/json"
+      responses: 
+        200:
+          description: "Ok"
+          schema: 
+            $ref: "#/definitions/TrackResponse"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+    
+    put:
+      tags:
+      - "Track"
+      summary: "Update a Track"
+      operationId: "UpdateTrack"
+      produces:
+      - "application/json"
+      consumes:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id of the track to update"
+        required: true
+        type: "number"
+      - name: "Track"
+        in: "body"
+        description: "Track that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/TrackInput"
+      responses:
+        200:
+          description: "Artist updated"
+          schema:
+            $ref: "#/definitions/TrackResponse"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+
+    delete:
+      tags:
+      - "Track"
+      summary: "Delete a track"
+      operationId: "DeleteTrack"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id of the track to delete"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "Track deleted"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse" 
+            
+  /spotify/play/track/{id}:
+    get:
+      tags:
+      - "Spotify"
+      summary: "Play a track"
+      operationId: "playTrack"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id of the track to play"
+        required: true
+        type: "number"
+      produces:
+      - "application/json"
+      responses: 
+        200:
+          description: "Ok"
+          schema: 
+            $ref: "#/definitions/TrackResponse"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+    
 
 definitions:
+  ArrayOfTracks:
+    type: "array"
+    items:
+      $ref: "#/definitions/TrackResponse"
+        
+
   ArrayOfAlbums:
     type: "array"
     items:
       properties:
         idAlbum:
           type: "number"
+        artist:
+          $ref: "#/definitions/ArtistResponse"
+        name:
+          type: "string"
+  
+  ArrayOfArtists:
+    type: "array"
+    items:
+      properties:
         idArtist:
           type: "number"
         name:
           type: "string"
+        genre:
+          type: "string"
+        image:
+          type: "string"
           
+  ArrayOfArtistRanked:
+    type: "array"
+    items:
+      $ref: "#/definitions/ArtistRankedResponse"
+  
+
   AlbumInput:
     type: "object"
     properties:
@@ -188,15 +666,82 @@ definitions:
         type: "number"
       name:
         type: "string"
+        
+  ArtistInput:
+    type: "object"
+    properties: 
+      name:
+        type: "string"
+      genre:
+        type: "string"
+      image:
+        type: "string"
+  
+  TrackInput:
+    type: "object"
+    properties:
+      name: 
+        type: "string"
+      idArtist:
+        type: "number"
+      idAlbum:
+        type: "number"
+      duration:
+        type: "number"
+        
+        
   AlbumResponse:
     type: "object"
     properties:
       idAlbum:
         type: "number"
+      artist:
+        $ref: "#/definitions/ArtistResponse"
+      name:
+        type: "string"
+  
+  ArtistResponse:
+    type: "object"
+    properties:
       idArtist:
         type: "number"
       name:
         type: "string"
+      genre:
+        type: "string"
+      image:
+        type: "string"
+  
+  ArtistRankedResponse:
+    type: "object"
+    properties:
+      idArtist:
+        type: "number"
+      name:
+        type: "string"
+      genre:
+        type: "string"
+      image:
+        type: "string"
+      reproductions:
+        type: "number"
+  
+  TrackResponse:
+    type: "object"
+    properties:
+      id:
+        type: "number"
+      name:
+        type: "string"
+      artist:
+        $ref: "#/definitions/ArtistResponse"
+      album:
+        $ref: "#/definitions/AlbumResponse"
+      reproductions:
+        type: "number"
+      duration:
+        type: "number"
+
   ErrorNotFoundResponse:
     type: "object"
     properties:
@@ -209,6 +754,7 @@ definitions:
       result:
         type: "string"
         example: "GENERIC_NOT_FOUND"
+  
   ErrorBadRequestResponse:
     type: "object"
     properties:
@@ -221,6 +767,7 @@ definitions:
       result:
         type: "string"
         example: "GENERIC_NOT_FOUND"
+  
   ErrorInternalServerResponse:
     type: "object"
     properties:
