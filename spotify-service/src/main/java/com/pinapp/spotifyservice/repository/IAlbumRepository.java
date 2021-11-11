@@ -13,5 +13,5 @@ public interface IAlbumRepository extends CrudRepository<Album, Long> {
   @Modifying
   @Transactional
   @Query(value = "DELETE FROM album WHERE id_artist = ?1", nativeQuery = true)
-  public void deleteByIdArtist(Long id);
+  void deleteByIdArtist(Long id);
 }

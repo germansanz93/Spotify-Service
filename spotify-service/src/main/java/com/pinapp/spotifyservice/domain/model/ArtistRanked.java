@@ -9,6 +9,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @Data
 @SuperBuilder
-public class ArtistRanked extends Artist{
+public class ArtistRanked extends Artist {
   private Long reproductions;
 }

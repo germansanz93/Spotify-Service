@@ -11,18 +11,18 @@ import java.util.function.Function;
 @Component
 public class ArtistRankedMapper implements Function<Artist, ArtistRanked> {
 
-    @Autowired
-    private IArtistRepository artistRepository;
+  @Autowired
+  private IArtistRepository artistRepository;
 
-    public ArtistRanked apply(Artist artist){
-      return ArtistRanked.builder()
-          .idArtist(artist.getIdArtist())
-          .name(artist.getName())
-          .genre(artist.getGenre())
-          .image(artist.getImage())
-          .build();
-    }
+  public ArtistRanked apply(Artist artist) {
+    return ArtistRanked.builder()
+        .idArtist(artist.getIdArtist())
+        .name(artist.getName())
+        .genre(artist.getGenre())
+        .image(artist.getImage())
+        .build();
   }
+}
 
 
 

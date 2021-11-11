@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,30 +19,34 @@ public class TrackController {
   private TrackService trackService;
 
   @GetMapping
-  public List<Track> retrieveTrack(){return trackService.getTracks();}
+  public List<Track> retrieveTrack() {
+    return trackService.getTracks();
+  }
 
-  @GetMapping(path="/{id}")
-  public Track retrieveTrack(@PathVariable Long id){
+  @GetMapping(path = "/{id}")
+  public Track retrieveTrack(@PathVariable Long id) {
     return trackService.getTrack(id);
   }
 
   @GetMapping(path = "/rank")
-  public List<Track> retrieveTopTracks(@RequestParam(name = "limit") Optional<Integer> limit){return trackService.getRankedTracks(limit.orElse(5));}
+  public List<Track> retrieveTopTracks(@RequestParam(name = "limit") Optional<Integer> limit) {
+    return trackService.getRankedTracks(limit.orElse(5));
+  }
 
   @PostMapping
   @ResponseStatus(code = HttpStatus.CREATED)
-  public Track createTrack(@Validated @RequestBody TrackRequest request){
+  public Track createTrack(@Validated @RequestBody TrackRequest request) {
     return trackService.createTrack(request);
   }
 
-  @PutMapping(path="/{id}")
-  public Track updateTrack(@PathVariable Long id, @RequestBody TrackRequest request){
+  @PutMapping(path = "/{id}")
+  public Track updateTrack(@PathVariable Long id, @RequestBody TrackRequest request) {
     request.setId(id);
     return trackService.updateTrack(request);
   }
 
-  @DeleteMapping(path="/{id}")
-  public void deleteTrack(@PathVariable Long id){
+  @DeleteMapping(path = "/{id}")
+  public void deleteTrack(@PathVariable Long id) {
     trackService.deleteTrack(id);
   }
 }

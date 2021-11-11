@@ -26,29 +26,39 @@ public class ArtistController {
   private TrackService trackService;
 
   @GetMapping
-  public List<Artist> retrieveArtist(){return artistService.getArtists();}
+  public List<Artist> retrieveArtist() {
+    return artistService.getArtists();
+  }
 
   @GetMapping(path = "/{id}")
-  public Artist retrieveArtist(@PathVariable Long id){return artistService.getArtist(id);}
+  public Artist retrieveArtist(@PathVariable Long id) {
+    return artistService.getArtist(id);
+  }
 
   @GetMapping(path = "/{id}/songs/rank")
-  public List<Track> retrieveArtistRankedSongs(@PathVariable Long id, @RequestParam(name = "limit") Optional<Integer> limit){
+  public List<Track> retrieveArtistRankedSongs(@PathVariable Long id, @RequestParam(name = "limit") Optional<Integer> limit) {
     return trackService.getArtistRankedTracks(id, limit.orElse(5));
   }
 
   @GetMapping(path = "/rank")
-  public List<ArtistRanked> retrieveArtistsRanked(@RequestParam(name = "limit") Optional<Integer> limit){return artistService.getTopArtists(limit.orElse(5));}
+  public List<ArtistRanked> retrieveArtistsRanked(@RequestParam(name = "limit") Optional<Integer> limit) {
+    return artistService.getTopArtists(limit.orElse(5));
+  }
 
   @PostMapping
   @ResponseStatus(code = HttpStatus.CREATED)
-  public Artist createArtist(@RequestBody ArtistRequest artist){return artistService.createArtist(artist);}
+  public Artist createArtist(@RequestBody ArtistRequest artist) {
+    return artistService.createArtist(artist);
+  }
 
   @PutMapping(path = "/{id}")
-  public Artist updateArtist(@PathVariable Long id, @RequestBody ArtistRequest request){
+  public Artist updateArtist(@PathVariable Long id, @RequestBody ArtistRequest request) {
     request.setIdArtist(id);
     return artistService.updateArtist(request);
   }
 
   @DeleteMapping(path = "/{id}")
-  public void deleteArtist(@PathVariable Long id){ artistService.deleteArtist(id);}
+  public void deleteArtist(@PathVariable Long id) {
+    artistService.deleteArtist(id);
+  }
 }

@@ -23,25 +23,29 @@ public class AlbumController {
   private AlbumService albumService;
 
   @GetMapping
-  public List<Album> retrieveAlbums(){
+  public List<Album> retrieveAlbums() {
     return albumService.getAlbums();
   }
 
   @GetMapping(path = "/{id}")
-  public Album retrieveAlbum(@PathVariable Long id){ return albumService.getAlbum(id);};
+  public Album retrieveAlbum(@PathVariable Long id) {
+    return albumService.getAlbum(id);
+  }
 
   @PostMapping
   @ResponseStatus(code = HttpStatus.CREATED)
-  public Album createAlbum(@Validated @RequestBody AlbumRequest request){
+  public Album createAlbum(@Validated @RequestBody AlbumRequest request) {
     return albumService.createAlbum(request);
   }
 
   @PutMapping(path = "/{id}")
-  public Album updateAlbum( @PathVariable Long id, @Validated @RequestBody AlbumRequest request ){
+  public Album updateAlbum(@PathVariable Long id, @Validated @RequestBody AlbumRequest request) {
     request.setIdAlbum(id);
     return albumService.updateAlbum(request);
   }
 
   @DeleteMapping(path = "/{id}")
-  public void deleteAlbum( @PathVariable Long id ){albumService.deleteAlbum(id);}
+  public void deleteAlbum(@PathVariable Long id) {
+    albumService.deleteAlbum(id);
+  }
 }

@@ -1,18 +1,21 @@
 package com.pinapp.spotifyservice.service.Implementation;
 
 import com.pinapp.spotifyservice.controller.request.TrackRequest;
-import com.pinapp.spotifyservice.domain.model.Track;
 import com.pinapp.spotifyservice.domain.mapper.TrackMapper;
+import com.pinapp.spotifyservice.domain.model.Track;
 import com.pinapp.spotifyservice.exception.AlbumNotExistException;
 import com.pinapp.spotifyservice.exception.TrackExistException;
 import com.pinapp.spotifyservice.exception.TrackNotExistException;
+import com.pinapp.spotifyservice.repository.IAlbumRepository;
 import com.pinapp.spotifyservice.repository.ITrackRepository;
 import com.pinapp.spotifyservice.service.ITrackService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -22,6 +25,9 @@ public class TrackService implements ITrackService {
 
   @Autowired
   public ITrackRepository trackRepository;
+
+  @Autowired
+  public IAlbumRepository albumRepository;
 
   @Autowired
   public ArtistService artistService;
@@ -60,7 +66,7 @@ public class TrackService implements ITrackService {
   }
 
   public Track getTrack(Long id) {
-    return trackRepository.findById(id).orElseThrow(() -> new AlbumNotExistException(String.format("Artist with id %d doesn't exist!", id)));
+    return trackRepository.findById(id).orElseThrow(() -> new AlbumNotExistException(String.format("Track with id %d doesn't exist!", id)));
   }
 
   public Track createTrack(TrackRequest request) {
@@ -80,7 +86,6 @@ public class TrackService implements ITrackService {
 
   public Track updateTrack(TrackRequest request) {
     Track track = trackMapper.apply(request);
-    log.info(track.toString());
     Long id = track.getId();
     Track foundTrack = trackRepository.findById(id).orElseThrow(() -> new TrackNotExistException(String.format("Track with id %d doesn't exist!", id)));
     track.setReproductions(foundTrack.getReproductions());

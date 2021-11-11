@@ -16,7 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -44,42 +45,42 @@ public class ArtistService implements IArtistService {
   public ArtistRankedMapper artistRankedMapper;
 
 
-  public List<Artist> getArtists(){
+  public List<Artist> getArtists() {
     log.info("getArtists request");
     return StreamSupport.stream(artistRepository.findAll().spliterator(), false).collect(Collectors.toList());
   }
 
-  public Artist getArtist(Long id){
+  public Artist getArtist(Long id) {
     log.info(String.format("getArtistById request with id: %d", id));
     return artistRepository.findById(id).orElseThrow(() -> new ArtistNotExistException(String.format("Artist with id %d doesn't exist!", id)));
   }
 
-  public Long artistReproductions(Long id){
+  public Long artistReproductions(Long id) {
     return trackService.getTracksByArtist(id).stream().mapToLong(Track::getReproductions).sum();
   }
 
   public List<ArtistRanked> getTopArtists(int limit) {
-    List<ArtistRanked> rankedArtists =  getArtists().stream().map(artist -> artistRankedMapper.apply(artist)).collect(Collectors.toList());
+    List<ArtistRanked> rankedArtists = getArtists().stream().map(artist -> artistRankedMapper.apply(artist)).collect(Collectors.toList());
     rankedArtists.forEach(artistRanked -> artistRanked.setReproductions(artistReproductions(artistRanked.getIdArtist())));
-    return  rankedArtists.stream().sorted(Comparator.comparingLong(ArtistRanked::getReproductions).reversed()).collect(Collectors.toList());
-  };
+    return rankedArtists.stream().sorted(Comparator.comparingLong(ArtistRanked::getReproductions).reversed()).collect(Collectors.toList());
+  }
 
 
-  public Artist createArtist(ArtistRequest request){
+  public Artist createArtist(ArtistRequest request) {
     Artist artist = artistMapper.apply(request);
     Long id = artist.getIdArtist();
     Artist savedArtist;
-    if(id != null && artistRepository.findById(id).isPresent()){
+    if (id != null && artistRepository.findById(id).isPresent()) {
       log.error(String.format("the id %d is already taken", id));
       throw new ArtistExistException(String.format("the id %d is already taken", id));
-    } else{
+    } else {
       savedArtist = artistRepository.save(artist);
       log.info("createArtist request... created");
     }
     return savedArtist;
   }
 
-  public Artist updateArtist(ArtistRequest request){
+  public Artist updateArtist(ArtistRequest request) {
     Artist artist = artistMapper.apply(request);
     Long id = artist.getIdArtist();
     artistRepository.findById(id).orElseThrow(() -> new ArtistNotExistException(String.format("Artist with id %d doesn't exist!", id)));

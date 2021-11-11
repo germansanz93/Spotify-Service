@@ -17,7 +17,9 @@ public class SpotifyController {
   SpotifyService spotifyService;
 
   @GetMapping(path = "/play/track/{id}")
-  public Track retrieveTrack(@PathVariable Long id){return spotifyService.playTrack(id);}
+  public Track retrieveTrack(@PathVariable Long id) {
+    return spotifyService.playTrack(id);
+  }
 
 
 }

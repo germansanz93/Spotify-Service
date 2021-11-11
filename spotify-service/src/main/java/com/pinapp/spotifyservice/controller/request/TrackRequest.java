@@ -1,7 +1,5 @@
 package com.pinapp.spotifyservice.controller.request;
 
-import com.pinapp.spotifyservice.domain.model.Album;
-import com.pinapp.spotifyservice.domain.model.Artist;
 import lombok.Builder;
 import lombok.Data;
 

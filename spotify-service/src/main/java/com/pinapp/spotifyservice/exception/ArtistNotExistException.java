@@ -1,8 +1,8 @@
 package com.pinapp.spotifyservice.exception;
 
-public class ArtistNotExistException extends RuntimeException{
+public class ArtistNotExistException extends RuntimeException {
 
-  public ArtistNotExistException(String message){
+  public ArtistNotExistException(String message) {
     super(message);
   }
 

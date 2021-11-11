@@ -1,8 +1,8 @@
 package com.pinapp.spotifyservice.exception;
 
-public class AlbumNotExistException extends RuntimeException{
+public class AlbumNotExistException extends RuntimeException {
 
-  public AlbumNotExistException(String message){
+  public AlbumNotExistException(String message) {
     super(message);
   }
 }
