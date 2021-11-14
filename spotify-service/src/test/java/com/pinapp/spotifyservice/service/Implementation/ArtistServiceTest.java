@@ -2,18 +2,22 @@ package com.pinapp.spotifyservice.service.Implementation;
 
 import com.pinapp.spotifyservice.controller.request.ArtistRequest;
 import com.pinapp.spotifyservice.domain.mapper.ArtistMapper;
+import com.pinapp.spotifyservice.domain.mapper.ArtistRankedMapper;
 import com.pinapp.spotifyservice.domain.model.Album;
 import com.pinapp.spotifyservice.domain.model.Artist;
 import com.pinapp.spotifyservice.domain.model.ArtistRanked;
 import com.pinapp.spotifyservice.domain.model.Track;
 import com.pinapp.spotifyservice.exception.ArtistExistException;
 import com.pinapp.spotifyservice.exception.ArtistNotExistException;
+import com.pinapp.spotifyservice.repository.IAlbumRepository;
 import com.pinapp.spotifyservice.repository.IArtistRepository;
-import org.junit.Ignore;
+import com.pinapp.spotifyservice.repository.ITrackRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
@@ -23,22 +27,33 @@ import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
+@Slf4j
 @RunWith(MockitoJUnitRunner.class)
 public class ArtistServiceTest {
 
   @InjectMocks
+  @Spy
   public ArtistService artistService;
 
   @Mock
   public IArtistRepository artistRepository;
 
   @Mock
+  public ITrackRepository trackRepository;
+
+  @Mock
+  public IAlbumRepository albumRepository;
+
+  @Mock
   public ArtistMapper artistMapper;
 
   @Mock
   public TrackService trackService;
+
+  @Mock
+  public ArtistRankedMapper artistRankedMapper;
 
   @Test
   public void getArtistsSuccess() {
@@ -83,12 +98,9 @@ public class ArtistServiceTest {
   }
 
   @Test
-  public void getArtistFailByIdNotExist() {
-    Long idArtist = 1L;
-
-    when(artistRepository.findById(idArtist)).thenReturn(Optional.empty());
-
-    assertThrows(ArtistNotExistException.class, () -> artistService.getArtist(idArtist));
+  public void getArtistFailByIdNotExists() {
+    when(artistRepository.findById(1L)).thenReturn(Optional.empty());
+    assertThrows(ArtistNotExistException.class, () -> artistService.getArtist(1L));
   }
 
   @Test
@@ -100,9 +112,9 @@ public class ArtistServiceTest {
         .image("https://www.futuro.cl/wp-content/uploads/2021/04/metallica-1983-mustaine-web-768x432.jpg")
         .build();
 
-    Album fakeAlbum =  Album.builder().idAlbum(2L).artist(fakeArtist).name("Ride the lightning").build();
+    Album fakeAlbum = Album.builder().idAlbum(2L).artist(fakeArtist).name("Ride the lightning").build();
 
-    List<Track> fakeRepoResponse =  Arrays.asList(
+    List<Track> fakeRepoResponse = Arrays.asList(
         Track.builder()
             .id(2L)
             .name("For whom the bell tolls")
@@ -131,15 +143,11 @@ public class ArtistServiceTest {
 
   }
 
-  @Ignore
   @Test
   public void getTopArtistsSuccess() {
-    Long idArtist1 = 1L;
-    Long idArtist2 = 2L;
-    Long idArtist3 = 3L;
     List<Artist> fakeRepoResponse = Arrays.asList(
         Artist.builder()
-            .idArtist(idArtist1)
+            .idArtist(1L)
             .name("Heroes del silencio")
             .genre("Rock")
             .image("https://phantom-marca.unidadeditorial.es/dfc731b5cc59092c5d9d8d70b10e3cad/resize/" +
@@ -147,53 +155,82 @@ public class ArtistServiceTest {
             .build(),
 
         Artist.builder()
-            .idArtist(idArtist2)
+            .idArtist(2L)
             .name("Metallica")
             .genre("Heavy metal")
             .image("https://www.futuro.cl/wp-content/uploads/2021/04/metallica-1983-mustaine-web-768x432.jpg")
             .build(),
 
         Artist.builder()
-            .idArtist(idArtist3)
+            .idArtist(3L)
             .name("Stevie Ray Vaughan")
             .genre("Blues")
             .image("https://i1.wp.com/jessicakristie.com/wp-content/uploads/2012/02/StevieRayVaughan.jpg")
             .build()
     );
 
-    List<ArtistRanked> fakeMethodResponse = Arrays.asList(
+    List<ArtistRanked> fakeMappedArtist = Arrays.asList(
         ArtistRanked.builder()
-            .idArtist(idArtist1)
+            .idArtist(1L)
             .name("Heroes del silencio")
             .genre("Rock")
             .image("https://phantom-marca.unidadeditorial.es/dfc731b5cc59092c5d9d8d70b10e3cad/resize/" +
                 "1320/f/jpg/assets/multimedia/imagenes/2021/04/05/16176436962285.jpg")
-            .reproductions(100L)
+            .reproductions(1123L)
             .build(),
 
         ArtistRanked.builder()
-            .idArtist(idArtist2)
+            .idArtist(2L)
             .name("Metallica")
             .genre("Heavy metal")
             .image("https://www.futuro.cl/wp-content/uploads/2021/04/metallica-1983-mustaine-web-768x432.jpg")
-            .reproductions(200L)
+            .reproductions(8626L)
             .build(),
 
         ArtistRanked.builder()
-            .idArtist(idArtist3)
+            .idArtist(3L)
             .name("Stevie Ray Vaughan")
             .genre("Blues")
             .image("https://i1.wp.com/jessicakristie.com/wp-content/uploads/2012/02/StevieRayVaughan.jpg")
-            .reproductions(300L)
+            .reproductions(3413L)
             .build()
     );
 
-    when(artistService.getArtists()).thenReturn(fakeRepoResponse);
-    when(artistService.artistReproductions(idArtist1)).thenReturn(100L);
-    when(artistService.artistReproductions(idArtist2)).thenReturn(200L);
-    when(artistService.artistReproductions(idArtist3)).thenReturn(300L);
+    List<ArtistRanked> fakeSortedArtists = Arrays.asList(
+        ArtistRanked.builder()
+            .idArtist(2L)
+            .name("Metallica")
+            .genre("Heavy metal")
+            .image("https://www.futuro.cl/wp-content/uploads/2021/04/metallica-1983-mustaine-web-768x432.jpg")
+            .reproductions(8626L)
+            .build(),
+        ArtistRanked.builder()
+            .idArtist(3L)
+            .name("Stevie Ray Vaughan")
+            .genre("Blues")
+            .image("https://i1.wp.com/jessicakristie.com/wp-content/uploads/2012/02/StevieRayVaughan.jpg")
+            .reproductions(3413L)
+            .build(),
+        ArtistRanked.builder()
+            .idArtist(1L)
+            .name("Heroes del silencio")
+            .genre("Rock")
+            .image("https://phantom-marca.unidadeditorial.es/dfc731b5cc59092c5d9d8d70b10e3cad/resize/" +
+                "1320/f/jpg/assets/multimedia/imagenes/2021/04/05/16176436962285.jpg")
+            .reproductions(1123L)
+            .build()
+    );
 
-    assertEquals(fakeMethodResponse, artistService.getTopArtists(2));
+    when(artistRepository.findAll()).thenReturn(fakeRepoResponse);
+    when(artistRankedMapper.apply(fakeRepoResponse.get(0))).thenReturn(fakeMappedArtist.get(0));
+    when(artistRankedMapper.apply(fakeRepoResponse.get(1))).thenReturn(fakeMappedArtist.get(1));
+    when(artistRankedMapper.apply(fakeRepoResponse.get(2))).thenReturn(fakeMappedArtist.get(2));
+    doReturn(fakeMappedArtist.get(0).getReproductions()).when(artistService).artistReproductions(fakeMappedArtist.get(0).getIdArtist());
+    doReturn(fakeMappedArtist.get(1).getReproductions()).when(artistService).artistReproductions(fakeMappedArtist.get(1).getIdArtist());
+    doReturn(fakeMappedArtist.get(2).getReproductions()).when(artistService).artistReproductions(fakeMappedArtist.get(2).getIdArtist());
+
+    assertEquals(fakeSortedArtists, artistService.getTopArtists(2));
+
   }
 
   @Test
@@ -246,8 +283,20 @@ public class ArtistServiceTest {
     assertThrows(ArtistNotExistException.class, () -> artistService.updateArtist(artistRequest));
   }
 
-  @Ignore
   @Test
-  public void deleteArtist() {
+  public void deleteArtistSuccess() {
+
+    Artist fakeArtist = Artist.builder().idArtist(1L).name("La renga").genre("Rock").image("ImageURL").build();
+
+    when(artistRepository.findById(eq(fakeArtist.getIdArtist()))).thenReturn(java.util.Optional.of(fakeArtist));
+
+    artistService.deleteArtist(fakeArtist.getIdArtist());
+
+    verify(artistRepository, times(1)).findById(eq(fakeArtist.getIdArtist()));
+    verify(trackRepository, times(1)).deleteByIdArtist(eq(1L));
+    verify(albumRepository, times(1)).deleteByIdArtist(eq(1L));
+    verify(artistRepository, times(1)).deleteById(eq(1L));
+
+
   }
 }
