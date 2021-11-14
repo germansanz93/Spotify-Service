@@ -12,7 +12,6 @@ import com.pinapp.spotifyservice.exception.ArtistNotExistException;
 import com.pinapp.spotifyservice.repository.IAlbumRepository;
 import com.pinapp.spotifyservice.repository.IArtistRepository;
 import com.pinapp.spotifyservice.repository.ITrackRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -29,7 +28,6 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-@Slf4j
 @RunWith(MockitoJUnitRunner.class)
 public class ArtistServiceTest {
 
