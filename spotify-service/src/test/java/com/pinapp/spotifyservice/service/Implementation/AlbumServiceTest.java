@@ -85,7 +85,7 @@ public class AlbumServiceTest {
     Artist fakeArtist = Artist.builder().idArtist(1L).name("La renga").genre("Rock").image("ImageURL").build();
     Album fakeAlbum = Album.builder().idAlbum(1L).artist(fakeArtist).name("La apariencia no es sincera").build();
 
-    when(albumRepository.findById(fakeAlbum.getIdAlbum())).thenReturn(Optional.ofNullable(fakeAlbum));
+    when(albumRepository.findById(fakeAlbum.getIdAlbum())).thenReturn(Optional.of(fakeAlbum));
 
     assertEquals(albumService.getAlbum(fakeAlbum.getIdAlbum()), fakeAlbum);
   }
