@@ -53,46 +53,131 @@ public class ArtistServiceTest {
   @Mock
   public ArtistRankedMapper artistRankedMapper;
 
+  List<Artist> fakeArtistList = Arrays.asList(
+      Artist.builder()
+          .idArtist(1L)
+          .name("Heroes del silencio")
+          .genre("Rock")
+          .image("https://phantom-marca.unidadeditorial.es/dfc731b5cc59092c5d9d8d70b10e3cad/resize/" +
+              "1320/f/jpg/assets/multimedia/imagenes/2021/04/05/16176436962285.jpg")
+          .build(),
+
+      Artist.builder()
+          .idArtist(2L)
+          .name("Metallica")
+          .genre("Heavy metal")
+          .image("https://www.futuro.cl/wp-content/uploads/2021/04/metallica-1983-mustaine-web-768x432.jpg")
+          .build(),
+
+      Artist.builder()
+          .idArtist(3L)
+          .name("Stevie Ray Vaughan")
+          .genre("Blues")
+          .image("https://i1.wp.com/jessicakristie.com/wp-content/uploads/2012/02/StevieRayVaughan.jpg")
+          .build()
+  );
+
+  Artist fakeArtist = Artist.builder().idArtist(1L).name("La renga").genre("Rock").image("ImageURL").build();
+
+  Artist fakeArtist2 = Artist.builder()
+      .idArtist(2L)
+      .name("Metallica")
+      .genre("Heavy metal")
+      .image("https://www.futuro.cl/wp-content/uploads/2021/04/metallica-1983-mustaine-web-768x432.jpg")
+      .build();
+
+  Album fakeAlbum = Album.builder().idAlbum(2L).artist(fakeArtist2).name("Ride the lightning").build();
+
+  List<Track> fakeTrackList = Arrays.asList(
+      Track.builder()
+          .id(2L)
+          .name("For whom the bell tolls")
+          .artist(fakeArtist2)
+          .album(fakeAlbum)
+          .duration(306000L)
+          .reproductions(3213L)
+          .build(),
+      Track.builder()
+          .id(3L)
+          .name("...And justice for all")
+          .artist(fakeArtist2)
+          .album(fakeAlbum)
+          .duration(567600L)
+          .reproductions(5413L)
+          .build()
+  );
+
+  List<ArtistRanked> fakeMappedArtist = Arrays.asList(
+      ArtistRanked.builder()
+          .idArtist(1L)
+          .name("Heroes del silencio")
+          .genre("Rock")
+          .image("https://phantom-marca.unidadeditorial.es/dfc731b5cc59092c5d9d8d70b10e3cad/resize/" +
+              "1320/f/jpg/assets/multimedia/imagenes/2021/04/05/16176436962285.jpg")
+          .reproductions(1123L)
+          .build(),
+
+      ArtistRanked.builder()
+          .idArtist(2L)
+          .name("Metallica")
+          .genre("Heavy metal")
+          .image("https://www.futuro.cl/wp-content/uploads/2021/04/metallica-1983-mustaine-web-768x432.jpg")
+          .reproductions(8626L)
+          .build(),
+
+      ArtistRanked.builder()
+          .idArtist(3L)
+          .name("Stevie Ray Vaughan")
+          .genre("Blues")
+          .image("https://i1.wp.com/jessicakristie.com/wp-content/uploads/2012/02/StevieRayVaughan.jpg")
+          .reproductions(3413L)
+          .build()
+  );
+
+  List<ArtistRanked> fakeSortedArtists = Arrays.asList(
+      ArtistRanked.builder()
+          .idArtist(2L)
+          .name("Metallica")
+          .genre("Heavy metal")
+          .image("https://www.futuro.cl/wp-content/uploads/2021/04/metallica-1983-mustaine-web-768x432.jpg")
+          .reproductions(8626L)
+          .build(),
+      ArtistRanked.builder()
+          .idArtist(3L)
+          .name("Stevie Ray Vaughan")
+          .genre("Blues")
+          .image("https://i1.wp.com/jessicakristie.com/wp-content/uploads/2012/02/StevieRayVaughan.jpg")
+          .reproductions(3413L)
+          .build(),
+      ArtistRanked.builder()
+          .idArtist(1L)
+          .name("Heroes del silencio")
+          .genre("Rock")
+          .image("https://phantom-marca.unidadeditorial.es/dfc731b5cc59092c5d9d8d70b10e3cad/resize/" +
+              "1320/f/jpg/assets/multimedia/imagenes/2021/04/05/16176436962285.jpg")
+          .reproductions(1123L)
+          .build()
+  );
+
+  ArtistRequest artistRequest = ArtistRequest.builder().name("La renga").genre("Rock").image("ImageURL").build();
+  Artist fakeArtistInput = Artist.builder().name("La renga").genre("Rock").image("ImageURL").build();
+  Artist fakeArtistResponse = Artist.builder().idArtist(1L).name("La renga").genre("Rock").image("ImageURL").build();
+
   @Test
   public void getArtistsSuccess() {
-    List<Artist> fakeRepoResponse = Arrays.asList(
-        Artist.builder()
-            .idArtist(1L)
-            .name("Heroes del silencio")
-            .genre("Rock")
-            .image("https://phantom-marca.unidadeditorial.es/dfc731b5cc59092c5d9d8d70b10e3cad/resize/" +
-                "1320/f/jpg/assets/multimedia/imagenes/2021/04/05/16176436962285.jpg")
-            .build(),
 
-        Artist.builder()
-            .idArtist(2L)
-            .name("Metallica")
-            .genre("Heavy metal")
-            .image("https://www.futuro.cl/wp-content/uploads/2021/04/metallica-1983-mustaine-web-768x432.jpg")
-            .build(),
+    when(artistRepository.findAll()).thenReturn(fakeArtistList);
 
-        Artist.builder()
-            .idArtist(3L)
-            .name("Stevie Ray Vaughan")
-            .genre("Blues")
-            .image("https://i1.wp.com/jessicakristie.com/wp-content/uploads/2012/02/StevieRayVaughan.jpg")
-            .build()
-    );
-
-    when(artistRepository.findAll()).thenReturn(fakeRepoResponse);
-
-    assertEquals(fakeRepoResponse, artistService.getArtists());
+    assertEquals(fakeArtistList, artistService.getArtists());
 
   }
 
   @Test
   public void getArtistSuccess() {
-    Artist fakeArtist = Artist.builder().idArtist(1L).name("La renga").genre("Rock").image("ImageURL").build();
-    Long idArtist = 1L;
 
-    when(artistRepository.findById(idArtist)).thenReturn(Optional.ofNullable(fakeArtist));
+    when(artistRepository.findById(fakeArtist.getIdArtist())).thenReturn(Optional.ofNullable(fakeArtist));
 
-    assertEquals(artistService.getArtist(idArtist), fakeArtist);
+    assertEquals(artistService.getArtist(fakeArtist.getIdArtist()), fakeArtist);
   }
 
   @Test
@@ -103,39 +188,12 @@ public class ArtistServiceTest {
 
   @Test
   public void artistReproductionsSuccess() {
-    Artist fakeArtist = Artist.builder()
-        .idArtist(2L)
-        .name("Metallica")
-        .genre("Heavy metal")
-        .image("https://www.futuro.cl/wp-content/uploads/2021/04/metallica-1983-mustaine-web-768x432.jpg")
-        .build();
-
-    Album fakeAlbum = Album.builder().idAlbum(2L).artist(fakeArtist).name("Ride the lightning").build();
-
-    List<Track> fakeRepoResponse = Arrays.asList(
-        Track.builder()
-            .id(2L)
-            .name("For whom the bell tolls")
-            .artist(fakeArtist)
-            .album(fakeAlbum)
-            .duration(306000L)
-            .reproductions(3213L)
-            .build(),
-        Track.builder()
-            .id(3L)
-            .name("...And justice for all")
-            .artist(fakeArtist)
-            .album(fakeAlbum)
-            .duration(567600L)
-            .reproductions(5413L)
-            .build()
-    );
 
     Long fakeReproductions = 3213L + 5413;
 
     Long idArtist = 1L;
 
-    when(trackService.getTracksByArtist(idArtist)).thenReturn(fakeRepoResponse);
+    when(trackService.getTracksByArtist(idArtist)).thenReturn(fakeTrackList);
 
     assertEquals(fakeReproductions, artistService.artistReproductions(idArtist));
 
@@ -143,86 +201,11 @@ public class ArtistServiceTest {
 
   @Test
   public void getTopArtistsSuccess() {
-    List<Artist> fakeRepoResponse = Arrays.asList(
-        Artist.builder()
-            .idArtist(1L)
-            .name("Heroes del silencio")
-            .genre("Rock")
-            .image("https://phantom-marca.unidadeditorial.es/dfc731b5cc59092c5d9d8d70b10e3cad/resize/" +
-                "1320/f/jpg/assets/multimedia/imagenes/2021/04/05/16176436962285.jpg")
-            .build(),
 
-        Artist.builder()
-            .idArtist(2L)
-            .name("Metallica")
-            .genre("Heavy metal")
-            .image("https://www.futuro.cl/wp-content/uploads/2021/04/metallica-1983-mustaine-web-768x432.jpg")
-            .build(),
-
-        Artist.builder()
-            .idArtist(3L)
-            .name("Stevie Ray Vaughan")
-            .genre("Blues")
-            .image("https://i1.wp.com/jessicakristie.com/wp-content/uploads/2012/02/StevieRayVaughan.jpg")
-            .build()
-    );
-
-    List<ArtistRanked> fakeMappedArtist = Arrays.asList(
-        ArtistRanked.builder()
-            .idArtist(1L)
-            .name("Heroes del silencio")
-            .genre("Rock")
-            .image("https://phantom-marca.unidadeditorial.es/dfc731b5cc59092c5d9d8d70b10e3cad/resize/" +
-                "1320/f/jpg/assets/multimedia/imagenes/2021/04/05/16176436962285.jpg")
-            .reproductions(1123L)
-            .build(),
-
-        ArtistRanked.builder()
-            .idArtist(2L)
-            .name("Metallica")
-            .genre("Heavy metal")
-            .image("https://www.futuro.cl/wp-content/uploads/2021/04/metallica-1983-mustaine-web-768x432.jpg")
-            .reproductions(8626L)
-            .build(),
-
-        ArtistRanked.builder()
-            .idArtist(3L)
-            .name("Stevie Ray Vaughan")
-            .genre("Blues")
-            .image("https://i1.wp.com/jessicakristie.com/wp-content/uploads/2012/02/StevieRayVaughan.jpg")
-            .reproductions(3413L)
-            .build()
-    );
-
-    List<ArtistRanked> fakeSortedArtists = Arrays.asList(
-        ArtistRanked.builder()
-            .idArtist(2L)
-            .name("Metallica")
-            .genre("Heavy metal")
-            .image("https://www.futuro.cl/wp-content/uploads/2021/04/metallica-1983-mustaine-web-768x432.jpg")
-            .reproductions(8626L)
-            .build(),
-        ArtistRanked.builder()
-            .idArtist(3L)
-            .name("Stevie Ray Vaughan")
-            .genre("Blues")
-            .image("https://i1.wp.com/jessicakristie.com/wp-content/uploads/2012/02/StevieRayVaughan.jpg")
-            .reproductions(3413L)
-            .build(),
-        ArtistRanked.builder()
-            .idArtist(1L)
-            .name("Heroes del silencio")
-            .genre("Rock")
-            .image("https://phantom-marca.unidadeditorial.es/dfc731b5cc59092c5d9d8d70b10e3cad/resize/" +
-                "1320/f/jpg/assets/multimedia/imagenes/2021/04/05/16176436962285.jpg")
-            .reproductions(1123L)
-            .build()
-    );
-
-    when(artistRepository.findAll()).thenReturn(fakeRepoResponse);
-    when(artistRankedMapper.apply(fakeRepoResponse.get(0))).thenReturn(fakeMappedArtist.get(0));
-    when(artistRankedMapper.apply(fakeRepoResponse.get(1))).thenReturn(fakeMappedArtist.get(1));
-    when(artistRankedMapper.apply(fakeRepoResponse.get(2))).thenReturn(fakeMappedArtist.get(2));
+    when(artistRepository.findAll()).thenReturn(fakeArtistList);
+    when(artistRankedMapper.apply(fakeArtistList.get(0))).thenReturn(fakeMappedArtist.get(0));
+    when(artistRankedMapper.apply(fakeArtistList.get(1))).thenReturn(fakeMappedArtist.get(1));
+    when(artistRankedMapper.apply(fakeArtistList.get(2))).thenReturn(fakeMappedArtist.get(2));
     doReturn(fakeMappedArtist.get(0).getReproductions()).when(artistService).artistReproductions(fakeMappedArtist.get(0).getIdArtist());
     doReturn(fakeMappedArtist.get(1).getReproductions()).when(artistService).artistReproductions(fakeMappedArtist.get(1).getIdArtist());
     doReturn(fakeMappedArtist.get(2).getReproductions()).when(artistService).artistReproductions(fakeMappedArtist.get(2).getIdArtist());
@@ -233,9 +216,6 @@ public class ArtistServiceTest {
 
   @Test
   public void createArtistSuccess() {
-    ArtistRequest artistRequest = ArtistRequest.builder().name("La renga").genre("Rock").image("ImageURL").build();
-    Artist fakeArtistInput = Artist.builder().name("La renga").genre("Rock").image("ImageURL").build();
-    Artist fakeArtistResponse = Artist.builder().idArtist(1L).name("La renga").genre("Rock").image("ImageURL").build();
 
     when(artistMapper.apply(eq(artistRequest))).thenReturn(fakeArtistInput);
     when(artistRepository.save(eq(fakeArtistInput))).thenReturn(fakeArtistResponse);
@@ -247,8 +227,6 @@ public class ArtistServiceTest {
 
   @Test
   public void createArtistFailByExistId() {
-    ArtistRequest artistRequest = ArtistRequest.builder().idArtist(1L).name("La renga").genre("Rock").image("ImageURL").build();
-    Artist fakeArtist = Artist.builder().idArtist(1L).name("La renga").genre("Rock").image("ImageURL").build();
 
     when(artistMapper.apply(eq(artistRequest))).thenReturn(fakeArtist);
     when(artistRepository.findById(eq(fakeArtist.getIdArtist()))).thenReturn(java.util.Optional.of(fakeArtist));
@@ -258,8 +236,6 @@ public class ArtistServiceTest {
 
   @Test
   public void updateArtistSuccess() {
-    ArtistRequest artistRequest = ArtistRequest.builder().idArtist(1L).name("La renga").genre("Rock").image("ImageURL").build();
-    Artist fakeArtist = Artist.builder().idArtist(1L).name("La renga").genre("Rock").image("ImageURL").build();
 
     when(artistMapper.apply(eq(artistRequest))).thenReturn(fakeArtist);
     when(artistRepository.findById(eq(fakeArtist.getIdArtist()))).thenReturn(java.util.Optional.of(fakeArtist));
@@ -272,8 +248,6 @@ public class ArtistServiceTest {
 
   @Test
   public void updateArtistFailByNotExistingId() {
-    ArtistRequest artistRequest = ArtistRequest.builder().idArtist(1L).name("La renga").genre("Rock").image("ImageURL").build();
-    Artist fakeArtist = Artist.builder().idArtist(1L).name("La renga").genre("Rock").image("ImageURL").build();
 
     when(artistMapper.apply(eq(artistRequest))).thenReturn(fakeArtist);
     when(artistRepository.findById(eq(fakeArtist.getIdArtist()))).thenReturn(Optional.empty());
@@ -283,8 +257,6 @@ public class ArtistServiceTest {
 
   @Test
   public void deleteArtistSuccess() {
-
-    Artist fakeArtist = Artist.builder().idArtist(1L).name("La renga").genre("Rock").image("ImageURL").build();
 
     when(artistRepository.findById(eq(fakeArtist.getIdArtist()))).thenReturn(java.util.Optional.of(fakeArtist));
 
