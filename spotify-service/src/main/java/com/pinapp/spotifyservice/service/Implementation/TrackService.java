@@ -66,7 +66,7 @@ public class TrackService implements ITrackService {
   }
 
   public Track getTrack(Long id) {
-    return trackRepository.findById(id).orElseThrow(() -> new AlbumNotExistException(String.format("Track with id %d doesn't exist!", id)));
+    return trackRepository.findById(id).orElseThrow(() -> new TrackNotExistException(String.format("Track with id %d doesn't exist!", id)));
   }
 
   public Track createTrack(TrackRequest request) {
@@ -93,9 +93,8 @@ public class TrackService implements ITrackService {
   }
 
   public void deleteTrack(Long id) {
-    trackRepository.findById(id).orElseThrow(() -> new AlbumNotExistException(String.format("Track with id %d doesn't exist!", id)));
+    trackRepository.findById(id).orElseThrow(() -> new TrackNotExistException(String.format("Track with id %d doesn't exist!", id)));
     trackRepository.deleteById(id);
-
   }
 
   public Track playTrack(Long idTrack) {

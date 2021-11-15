@@ -295,6 +295,5 @@ public class ArtistServiceTest {
     verify(albumRepository, times(1)).deleteByIdArtist(eq(1L));
     verify(artistRepository, times(1)).deleteById(eq(1L));
 
-
   }
 }

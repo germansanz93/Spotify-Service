@@ -7,7 +7,6 @@ import com.pinapp.spotifyservice.domain.model.Artist;
 import com.pinapp.spotifyservice.exception.AlbumExistException;
 import com.pinapp.spotifyservice.exception.AlbumNotExistException;
 import com.pinapp.spotifyservice.repository.IAlbumRepository;
-import com.pinapp.spotifyservice.repository.IArtistRepository;
 import com.pinapp.spotifyservice.repository.ITrackRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,9 +37,6 @@ public class AlbumServiceTest {
 
   @Mock
   public ITrackRepository trackRepository;
-
-  @Mock
-  public IArtistRepository artistRepository;
 
   @Mock
   public AlbumMapper albumMapper;
