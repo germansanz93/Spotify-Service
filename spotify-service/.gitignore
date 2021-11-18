@@ -40,3 +40,5 @@ ENUNCIADO.md
 
 ### Docker ###
 Dockerfile
+../docker-compose.yml
+../.env
