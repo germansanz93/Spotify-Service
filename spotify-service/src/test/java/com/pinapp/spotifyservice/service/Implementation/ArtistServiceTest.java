@@ -263,8 +263,8 @@ public class ArtistServiceTest {
     artistService.deleteArtist(fakeArtist.getIdArtist());
 
     verify(artistRepository, times(1)).findById(eq(fakeArtist.getIdArtist()));
-    verify(trackRepository, times(1)).deleteByIdArtist(eq(1L));
-    verify(albumRepository, times(1)).deleteByIdArtist(eq(1L));
+    verify(trackRepository, times(1)).deleteTracksByArtist_IdArtist(eq(1L));
+    verify(albumRepository, times(1)).deleteAlbumsByArtist_IdArtist(eq(1L));
     verify(artistRepository, times(1)).deleteById(eq(1L));
 
   }

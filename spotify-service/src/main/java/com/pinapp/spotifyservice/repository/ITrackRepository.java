@@ -12,11 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ITrackRepository extends CrudRepository<Track, Long> {
   @Modifying
   @Transactional
-  @Query(value = "DELETE FROM track WHERE id_artist = ?1", nativeQuery = true)
-  void deleteByIdArtist(Long id);
+  void deleteTracksByArtist_IdArtist(Long id);
 
   @Modifying
   @Transactional
-  @Query(value = "DELETE FROM track WHERE id_album = ?1", nativeQuery = true)
-  void deleteByIdAlbum(Long id);
+  void deleteTracksByAlbum_IdAlbum(Long id);
 }

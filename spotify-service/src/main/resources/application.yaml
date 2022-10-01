@@ -5,9 +5,9 @@ spring:
   application:
     name: Spotify-Server
   datasource:
-    url: jdbc:mysql://localhost:3307/spotify-service?useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://localhost:3307/spotify_service?useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
-    password: 123456
+    password:
     driverClassName: com.mysql.cj.jdbc.Driver
     initialization-mode: always
   jpa:
@@ -33,6 +33,7 @@ management:
 logging:
   level:
     org.springframework: ERROR
+    org.hibernate.SQL: DEBUG
     com.mkyong: DEBUG
   pattern:
     console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"

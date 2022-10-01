@@ -172,14 +172,14 @@ public class TrackServiceTest {
 
     when(trackRepository.findAll()).thenReturn(fakeTrackList);
 
-    assertEquals(fakeTrackList, trackService.getTracks());
+    assertEquals(fakeTrackList, trackService.getTracks(any()));
 
   }
 
   @Test
   public void getTracksByArtistSuccess() {
 
-    when(trackService.getTracks()).thenReturn(fakeTrackList);
+    when(trackService.getTracks(any())).thenReturn(fakeTrackList);
 
     assertEquals(fakeTrackList.subList(1,3), trackService.getTracksByArtist(fakeArtistsList.get(1).getIdArtist()));
 
@@ -197,7 +197,7 @@ public class TrackServiceTest {
   @Test
   public void getRankedTracksSuccess() {
 
-    when(trackService.getTracks()).thenReturn(fakeTrackList);
+    when(trackService.getTracks(any())).thenReturn(fakeTrackList);
     assertEquals(fakeSortedTrackList, trackService.getRankedTracks(2));
   }
 

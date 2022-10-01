@@ -12,6 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface IAlbumRepository extends CrudRepository<Album, Long> {
   @Modifying
   @Transactional
-  @Query(value = "DELETE FROM album WHERE id_artist = ?1", nativeQuery = true)
-  void deleteByIdArtist(Long id);
+  void deleteAlbumsByArtist_IdArtist(Long id);
+
 }

@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +42,9 @@ public class AlbumServiceTest {
 
   @Mock
   public AlbumMapper albumMapper;
+
+  @Mock
+  public EntityManager entityManager;
 
   public List<Artist> fakeArtistsList = Arrays.asList(
       Artist.builder()
@@ -151,7 +155,7 @@ public class AlbumServiceTest {
 
     albumService.deleteAlbum(fakeArtist.getIdArtist());
 
-    verify(trackRepository, times(1)).deleteByIdAlbum(eq(fakeAlbum.getIdAlbum()));
+    verify(trackRepository, times(1)).deleteTracksByAlbum_IdAlbum(eq(fakeAlbum.getIdAlbum()));
     verify(albumRepository, times(1)).deleteById(eq(fakeAlbum.getIdAlbum()));
   }
 }

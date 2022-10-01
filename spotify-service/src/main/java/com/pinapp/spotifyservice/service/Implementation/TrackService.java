@@ -12,6 +12,11 @@ import com.pinapp.spotifyservice.service.ITrackService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -35,14 +40,22 @@ public class TrackService implements ITrackService {
   @Autowired
   public TrackMapper trackMapper;
 
-  public List<Track> getTracks() {
+  @Autowired
+  public EntityManager entityManger;
+
+  public List<Track> getTracks(Long idArtist) {
+    CriteriaBuilder criteriaBuilder = entityManger.getCriteriaBuilder();
+    CriteriaQuery<Track> query = criteriaBuilder.createQuery(Track.class);
+    Root<Track> track = query.from(Track.class);
     log.info("getTracks request");
-    return StreamSupport.stream(trackRepository.findAll().spliterator(), false).collect(Collectors.toList());
+    return Objects.nonNull(idArtist) ?
+    entityManger.createQuery(query.select(track).where(criteriaBuilder.equal(track.get("artist").get("idArtist"), idArtist))).getResultList() :
+    StreamSupport.stream(trackRepository.findAll().spliterator(), false).collect(Collectors.toList());
   }
 
   public List<Track> getTracksByArtist(Long idArtist) {
     log.info(String.format("getTracksByArtist request with idArtist: %d", idArtist));
-    return getTracks()
+    return getTracks(null)
         .stream()
         .filter(track -> Objects.equals(track.getArtist().getIdArtist(), idArtist))
         .collect(Collectors.toList());
@@ -62,7 +75,7 @@ public class TrackService implements ITrackService {
   }
 
   public List<Track> getRankedTracks(int limit) {
-    return getTracks().stream().sorted(Comparator.comparing(Track::getReproductions).reversed()).limit(limit).collect(Collectors.toList());
+    return getTracks(null).stream().sorted(Comparator.comparing(Track::getReproductions).reversed()).limit(limit).collect(Collectors.toList());
   }
 
   public Track getTrack(Long id) {

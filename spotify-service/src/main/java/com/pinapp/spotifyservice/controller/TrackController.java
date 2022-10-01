@@ -19,8 +19,10 @@ public class TrackController {
   private TrackService trackService;
 
   @GetMapping
-  public List<Track> retrieveTrack() {
-    return trackService.getTracks();
+  public List<Track> retrieveTracks(
+          @RequestParam(value = "idArtist", required = false) Long idArtist
+  ) {
+    return trackService.getTracks(idArtist);
   }
 
   @GetMapping(path = "/{id}")

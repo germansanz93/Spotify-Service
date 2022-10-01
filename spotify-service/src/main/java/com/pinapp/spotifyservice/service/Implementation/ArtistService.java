@@ -44,14 +44,14 @@ public class ArtistService implements IArtistService {
   @Autowired
   public ArtistRankedMapper artistRankedMapper;
 
-
-  public List<Artist> getArtists() {
+  public List<Artist> getArtists(){
     log.info("getArtists request");
     return StreamSupport.stream(artistRepository.findAll().spliterator(), false).collect(Collectors.toList());
   }
 
   public Artist getArtist(Long id) {
     log.info(String.format("getArtistById request with id: %d", id));
+
     return artistRepository.findById(id).orElseThrow(() -> new ArtistNotExistException(String.format("Artist with id %d doesn't exist!", id)));
   }
 
@@ -88,8 +88,8 @@ public class ArtistService implements IArtistService {
 
   public void deleteArtist(Long id) {
     artistRepository.findById(id).orElseThrow(() -> new ArtistNotExistException(String.format("Artist with id %d doesn't exist!", id)));
-    trackRepository.deleteByIdArtist(id);
-    albumRepository.deleteByIdArtist(id);
+    trackRepository.deleteTracksByArtist_IdArtist(id);
+    albumRepository.deleteAlbumsByArtist_IdArtist(id);
     artistRepository.deleteById(id);
   }
 }

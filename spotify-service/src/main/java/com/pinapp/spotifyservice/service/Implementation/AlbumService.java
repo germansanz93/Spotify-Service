@@ -62,7 +62,7 @@ public class AlbumService implements IAlbumService {
 
   public void deleteAlbum(Long id) {
     albumRepository.findById(id).orElseThrow(() -> new AlbumNotExistException(String.format("Album with id %d doesn't exist!", id)));
-    trackrepository.deleteByIdAlbum(id);
+    trackrepository.deleteTracksByAlbum_IdAlbum(id);
     albumRepository.deleteById(id);
   }
 }

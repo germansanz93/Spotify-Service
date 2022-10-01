@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ITrackService {
 
-  List getTracks();
+  List getTracks(Long idArtist);
 
   List getTracksByArtist(Long idArtist);
 
