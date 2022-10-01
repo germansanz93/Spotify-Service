@@ -21,4 +21,4 @@ To run the spring project you only need run:
 ```
 mvn clean install
 ```
-and then you can run 
+and then you can run it
